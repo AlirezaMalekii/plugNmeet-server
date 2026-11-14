@@ -1,0 +1,46 @@
+{
+  "host": "94.184.47.206",
+  "domains": [
+    "meet.ineshast.ir",
+    "turn.ineshast.ir"
+  ],
+  "deployed_source_sha": "6c5279549e51aaef409b6dca89d0864da1afe0c1",
+  "services_running": [
+    "db",
+    "redis",
+    "nats",
+    "livekit",
+    "server",
+    "recorder"
+  ],
+  "verified": {
+    "https_root": 200,
+    "https_health": "Healthy",
+    "tls_certificate_expiry": "2027-02-12",
+    "tls_renewal_dry_run": "passed",
+    "docker_bridge_to_livekit_api": "passed via nc",
+    "nats_generated_keys": "server and recorder authenticated successfully",
+    "native_api_smoke": [
+      "room/create success",
+      "room/isRoomActive true",
+      "room/getJoinToken issued",
+      "room/endRoom success"
+    ],
+    "encrypted_backup": "20261114T103336Z.tar.gz.age copied to Mac",
+    "recovery_rehearsal": "decrypted backup and imported four tables into isolated no-network MariaDB; test container removed",
+    "systemd_timers": [
+      "plugnmeet-health every5min",
+      "plugnmeet-backup daily02:30UTC seven snapshots"
+    ]
+  },
+  "pending": [
+    "observer image deployment",
+    "browser media pilot two rooms ten users two recordings",
+    "two independent networks and forced TURN",
+    "speaker interval alignment real audio",
+    "media recovery playback",
+    "application rollback rehearsal",
+    "Core and Panel deployment",
+    "default-provider activation after acceptance"
+  ]
+}

@@ -1,0 +1,6 @@
+/runtime/
+/.env
+/backups/
+/releases/
+
+__pycache__/

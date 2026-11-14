@@ -1,0 +1,8 @@
+[Unit]
+Description=Encrypted plugNmeet backup
+After=docker.service
+[Service]
+Type=oneshot
+ExecStart=/opt/plugnmeet/ops/backup.sh age1ezr8p6qf7a8p74vjejtyeahnfdv7396jx08jk8pks549hwq8fvmq42avne
+Nice=15
+IOSchedulingClass=idle

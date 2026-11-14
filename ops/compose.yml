@@ -1,0 +1,92 @@
+name: plugnmeet
+x-common: &common
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options:
+      max-size: 10m
+      max-file: '3'
+services:
+  redis:
+    <<: *common
+    image: ${REDIS_IMAGE:?set immutable image}
+    command: [redis-server, /etc/redis.conf]
+    volumes:
+      - ./runtime/redis.conf:/etc/redis.conf:ro
+      - redis:/data
+    ports: ['127.0.0.1:16379:6379']
+    mem_limit: 160m
+  db:
+    <<: *common
+    image: ${MARIADB_IMAGE:?set immutable image}
+    env_file: ./runtime/db.env
+    volumes:
+      - database:/var/lib/mysql
+      - ../sql_dump/install.sql:/docker-entrypoint-initdb.d/install.sql:ro
+    mem_limit: 400m
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 10s
+      retries: 20
+  nats:
+    <<: *common
+    image: ${NATS_IMAGE:?set immutable image}
+    command: [-c, /etc/nats.conf]
+    volumes:
+      - ./runtime/nats.conf:/etc/nats.conf:ro
+      - nats:/data
+    ports: ['127.0.0.1:18222:8222']
+    mem_limit: 192m
+  livekit:
+    <<: *common
+    image: ${LIVEKIT_IMAGE:?set immutable image}
+    network_mode: host
+    command: [--config, /etc/livekit.yaml]
+    volumes: ['./runtime/livekit.yaml:/etc/livekit.yaml:ro']
+    mem_limit: 500m
+    depends_on: [redis]
+  server:
+    <<: *common
+    image: ${SERVER_IMAGE:?set immutable image}
+    command: [plugnmeet-server, --config, /app/config.yaml]
+    volumes:
+      - ./runtime/server.yaml:/app/config.yaml:ro
+      - ./runtime/client-config.js:/app/client/dist/assets/config.js:ro
+      - recordings:/recording_files
+      - upload:/app/upload
+      - artifacts:/app/artifacts
+    ports: ['127.0.0.1:18080:8080']
+    extra_hosts: ['host.docker.internal:host-gateway']
+    mem_limit: 650m
+    depends_on:
+      db: {condition: service_healthy}
+      nats: {condition: service_started}
+      livekit: {condition: service_started}
+  speaking-observer:
+    <<: *common
+    image: ${SERVER_IMAGE:?set immutable image}
+    entrypoint: [/usr/bin/speaking-observer]
+    env_file: ./runtime/observer.env
+    volumes: [speaking:/data/speaking]
+    extra_hosts: [host.docker.internal:host-gateway]
+    mem_limit: 160m
+    depends_on: [server]
+  recorder:
+    <<: *common
+    image: ${RECORDER_IMAGE:?set immutable image}
+    command: [--config, /app/config.yaml]
+    volumes:
+      - ./runtime/recorder.yaml:/app/config.yaml:ro
+      - recordings:/recording_files
+    shm_size: 256m
+    mem_limit: 1400m
+    cpus: 1.3
+    depends_on: [server]
+volumes:
+  database:
+  redis:
+  nats:
+  recordings:
+  upload:
+  artifacts:
+  speaking:
