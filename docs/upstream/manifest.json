@@ -1,0 +1,296 @@
+{
+  "repository": "mynaparrot/plugNmeet-docs",
+  "commit": "44a474a17d965e17ebb68c43991205768ef4c27f",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "50c88d3961fd56028afd37402fdeedf85873030fbd1880561aa6121adfd272dd",
+      "bytes": 1067
+    },
+    {
+      "path": "docs/api/_category_.json",
+      "sha256": "6a70a8eb1957c279762280c308d14377d67e3af4aa96d5c4f6fc6ff0ea4d633c",
+      "bytes": 39
+    },
+    {
+      "path": "docs/api/analytics/_category_.json",
+      "sha256": "922137014a47ab66197e6d2d2e44a5519fb6d4dcf9313faed13af43dd74a3129",
+      "bytes": 78
+    },
+    {
+      "path": "docs/api/analytics/delete.md",
+      "sha256": "025368bf49da3eed2123b13f937fb295f7a87d2acea77af272875f9eb665948b",
+      "bytes": 1154
+    },
+    {
+      "path": "docs/api/analytics/download.md",
+      "sha256": "0734f1d3186d337ef74f1c420b5d1af577a28daa6ac99a67d6e066b86941a61e",
+      "bytes": 1467
+    },
+    {
+      "path": "docs/api/analytics/fetch.md",
+      "sha256": "806ee342e74b8e364bad51a4b262f61834dbe74a5cab901224ef33020855c99f",
+      "bytes": 3196
+    },
+    {
+      "path": "docs/api/artifact/_category_.json",
+      "sha256": "e79cc37715dd329c778e30df32be97d9382afdd7614914496b31178fb7a9d85c",
+      "bytes": 65
+    },
+    {
+      "path": "docs/api/artifact/artifact-info.md",
+      "sha256": "50ca15f1348a8bddd9da544ad906730ffd8f3bef16092d379edc520d2779aded",
+      "bytes": 2879
+    },
+    {
+      "path": "docs/api/artifact/delete.md",
+      "sha256": "8ebae24e2fcff74a0dd7f6a0da78d893909b53f5568c983cc14011b06eb9d83d",
+      "bytes": 1630
+    },
+    {
+      "path": "docs/api/artifact/download.md",
+      "sha256": "38e13edd7f36bc7aa8dffc3ecef3013d91965e3c2e64ce8cff86d76e39944e0e",
+      "bytes": 1880
+    },
+    {
+      "path": "docs/api/artifact/fetch.md",
+      "sha256": "c269f8c5d6a195a60e1d92958f04a9540f979a5c5b003b3f8d80caff75ddf9fd",
+      "bytes": 4977
+    },
+    {
+      "path": "docs/api/get-client-files.md",
+      "sha256": "c7a3873f832239d817d2f0ef00e6406a3ba8e6ad656b86548e2e38319b9943e1",
+      "bytes": 6319
+    },
+    {
+      "path": "docs/api/intro.md",
+      "sha256": "c406378b52af85039f59c43bd6dcda08cc91b21d65773c373c52371ad0298b49",
+      "bytes": 6679
+    },
+    {
+      "path": "docs/api/recording/_category_.json",
+      "sha256": "680923bf095ba1e2066e0b2887267b3c13d4af25a89b0bbb456b5e3ac87faa6a",
+      "bytes": 66
+    },
+    {
+      "path": "docs/api/recording/delete.md",
+      "sha256": "76b35eec7228ed822a7abbb0e32fbedc598099f49707ccd3cc855da37d07b326",
+      "bytes": 1524
+    },
+    {
+      "path": "docs/api/recording/download.md",
+      "sha256": "6d7f6b0715787e387197b70a90ca9858d7aa09f5166298f259820101f030d542",
+      "bytes": 2096
+    },
+    {
+      "path": "docs/api/recording/fetch.md",
+      "sha256": "9bcdeb43bdfeab84a58b8dfe5c6e16e5b378616ddef97e0cf60781a5915c6441",
+      "bytes": 5155
+    },
+    {
+      "path": "docs/api/recording/merge-recordings.md",
+      "sha256": "87249da4e87d7cff9eb019139e18921d52207430430d8e5086934748e26aab65",
+      "bytes": 6061
+    },
+    {
+      "path": "docs/api/recording/recording-info.md",
+      "sha256": "85e7aea5913209c9dc4ea6ea2461e77e188d60682527efbe9e57d8e594deaa85",
+      "bytes": 2135
+    },
+    {
+      "path": "docs/api/recording/update-metadata.md",
+      "sha256": "2d1d5d3ad6b7dde6ec50a5a27a0edf6156191dd9b5363d9a3d05bdcf6130225d",
+      "bytes": 1962
+    },
+    {
+      "path": "docs/api/room/_category_.json",
+      "sha256": "c5522d3563f08ad89f20fffff8821805a1a2929ad846b430c11657074bde8118",
+      "bytes": 61
+    },
+    {
+      "path": "docs/api/room/broadcast-to-room.md",
+      "sha256": "d0a8654669d5811f349bb861b6993144e5d9c65229ed89c259890dcd12194b29",
+      "bytes": 5398
+    },
+    {
+      "path": "docs/api/room/create-poll.md",
+      "sha256": "5ca97ddfda252b7e3e67876f2f967dd15fa5849be0b4dd785dfd09a2923098a4",
+      "bytes": 6913
+    },
+    {
+      "path": "docs/api/room/create.md",
+      "sha256": "d440a2d072206280704f7936efdd4a88c697b619ac349ca779af1562f10eb06a",
+      "bytes": 31577
+    },
+    {
+      "path": "docs/api/room/end.md",
+      "sha256": "e87ceac834694cac27c1df7dd8023ee6aa290c0b00ab8fd7300bf0cdd44615ed",
+      "bytes": 1509
+    },
+    {
+      "path": "docs/api/room/fetch-past.md",
+      "sha256": "e6843007408e96f6067f0bf25de0a7347d2ac5edf2e1b5a632bc1a1644483832",
+      "bytes": 4387
+    },
+    {
+      "path": "docs/api/room/is-active.md",
+      "sha256": "79526685a71d2596c0dd69c20f7e22a79b1112fa15f926f193fe7534f1f083de",
+      "bytes": 1686
+    },
+    {
+      "path": "docs/api/room/join.md",
+      "sha256": "4caa5373014365876d0327f85b5d4b99904c54c04222a8e797b1518ce0c787e2",
+      "bytes": 7627
+    },
+    {
+      "path": "docs/api/room/room-info.md",
+      "sha256": "73444173efeb61bf83e7f9cb4bb382408fbca39bebd376daa5b6eab5e1e3c769",
+      "bytes": 3887
+    },
+    {
+      "path": "docs/api/room/rooms-info.md",
+      "sha256": "c50c05089efe5fd9b3a56fa824f6b5a9c58199c87c25410de9c18bd67a2a3dc2",
+      "bytes": 1662
+    },
+    {
+      "path": "docs/api/room/upload-whiteboard-file.md",
+      "sha256": "d8691409de533779200e10d1a6ffb4580c698e1a46ad1ceed630c1d2eae7fd67",
+      "bytes": 8019
+    },
+    {
+      "path": "docs/benchmark.md",
+      "sha256": "66877afd25135d3b0da6c8e57cf9fb81039a6f88dc01962a9aaa772efc221f38",
+      "bytes": 18517
+    },
+    {
+      "path": "docs/developer-guide/_category_.json",
+      "sha256": "6569b4421b354c2aceb53f91a6f5e1537521ca5b79c72a4643718d265741fd14",
+      "bytes": 51
+    },
+    {
+      "path": "docs/developer-guide/design-customisation.md",
+      "sha256": "dc51053e5c5cc174ee2f4f8e15e8becc14083ab2c293f85a59dde84e0155dd8f",
+      "bytes": 7195
+    },
+    {
+      "path": "docs/developer-guide/intro.md",
+      "sha256": "5c424255ea79fc920e95d2169a88d0575cf1e2034287baa5b7dd2c539d642b38",
+      "bytes": 2391
+    },
+    {
+      "path": "docs/developer-guide/mobile-app-integration.md",
+      "sha256": "963151df5755486d229c64fc5fa82e8c90d4cec8df1b169e09a59fc22120e9f6",
+      "bytes": 9928
+    },
+    {
+      "path": "docs/developer-guide/scalable-setup.md",
+      "sha256": "39ac2967201edc1823d9c4bd88b473bc104152a69e9f5e5396f7e5610cc61e5c",
+      "bytes": 14236
+    },
+    {
+      "path": "docs/developer-guide/setup-development.md",
+      "sha256": "614444f7948b0038ea9b6e9288b8d422ba577da931bb5c66d3d767b4ea9a4682",
+      "bytes": 5207
+    },
+    {
+      "path": "docs/firewall.md",
+      "sha256": "b5e79e0aa5177eec135f301283ecbd853678aaa70beded20c1e13a8adb0313ef",
+      "bytes": 4586
+    },
+    {
+      "path": "docs/installation.md",
+      "sha256": "362b61be634f2068a6436e584b3dfc251eb721e048598e354bb17d3f3d643dc1",
+      "bytes": 8074
+    },
+    {
+      "path": "docs/intro.md",
+      "sha256": "aa52fa2c92e33ce40ba04d89dd2f7ae905c2851ffd565d8268d834a5cffbefbe",
+      "bytes": 12625
+    },
+    {
+      "path": "docs/others/_category_.json",
+      "sha256": "13b10ab628032501ee23c3f6ded2dd616b5a84c3d17c60da8ba7f3805f970213",
+      "bytes": 163
+    },
+    {
+      "path": "docs/others/analytics.md",
+      "sha256": "33b6f9ef5e29bcf3ee2a61eb6221836ee3b86a03e5cee1850453e721bcdbd14e",
+      "bytes": 12268
+    },
+    {
+      "path": "docs/others/hooks.md",
+      "sha256": "4978ff93ff57c610b5050d2f2659bf27f9e69065c4c60fd4e30b6970e6f86a50",
+      "bytes": 15177
+    },
+    {
+      "path": "docs/others/webhooks.md",
+      "sha256": "3f47ffeb888b020023685a836202d3d3ad9bd104d9e1552c8168df7cede2781b",
+      "bytes": 10922
+    },
+    {
+      "path": "docs/security-overview.md",
+      "sha256": "b6c5ca7558c40bb2adbeed7bcc41593c4c52f2615ff7ba213c5fd5a932a1727c",
+      "bytes": 21999
+    },
+    {
+      "path": "docs/tutorials/_category_.json",
+      "sha256": "8726e7a2400d45b6eaa925c49b0b1c6439796f42bf1083955a6bab2f81093613",
+      "bytes": 49
+    },
+    {
+      "path": "docs/tutorials/migration-from-bbb.md",
+      "sha256": "ae223dff98b52f10b9acd2a9605d6855f50355b1308ec541bf58772d8d6677cb",
+      "bytes": 5456
+    },
+    {
+      "path": "docs/tutorials/quick_php.md",
+      "sha256": "0cdd4289ece8d2715c02d17650cf951a4a7da86dc05d41d826a2c14341d99c53",
+      "bytes": 8571
+    },
+    {
+      "path": "docs/user-guide/_category_.json",
+      "sha256": "6c8a7258af61ec317a8ff9d7fcc85da5feb5eaef8ce3abdbcee633efee1fefc3",
+      "bytes": 68
+    },
+    {
+      "path": "docs/user-guide/attendee.md",
+      "sha256": "11c61592e288739d6013576f54172fc606fd527190d9c5406cfa081339036c09",
+      "bytes": 4935
+    },
+    {
+      "path": "docs/user-guide/joomla-integration.md",
+      "sha256": "5252b89d8e2b24f069d0780e18de4303a874013ad4a0ce57b7e463a39d8092a7",
+      "bytes": 12800
+    },
+    {
+      "path": "docs/user-guide/lti.md",
+      "sha256": "d5a6d375fc528f6dcebd83d5e770e4e037955b0ecee302042e48e30e9e1602f7",
+      "bytes": 6623
+    },
+    {
+      "path": "docs/user-guide/moderator.md",
+      "sha256": "857ac7bd3008e43a0ac1c92d21b8634608f908daa72c67953346b086c63a51c4",
+      "bytes": 18830
+    },
+    {
+      "path": "docs/user-guide/moodle-integration.md",
+      "sha256": "bad234cafaa22f987cd93023e0d3c78377e478edf373a3c9f0a75173c01e46f4",
+      "bytes": 17522
+    },
+    {
+      "path": "docs/user-guide/overview.md",
+      "sha256": "3ff64b284bfdb0486546bd78325c8cb3294c90e1067b95f9d75169efc85e56b3",
+      "bytes": 1761
+    },
+    {
+      "path": "docs/user-guide/wordPress-integration.md",
+      "sha256": "296c6e32f1fe7767c44ee2f24e99e43ee6901a9767d60f018fb969809614040d",
+      "bytes": 15804
+    },
+    {
+      "path": "sidebars.js",
+      "sha256": "5989deb8e79c1887f72e44ecd3fcc5b4cbe4f2cba8330df46c17d7aead2583de",
+      "bytes": 727
+    }
+  ]
+}
