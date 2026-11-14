@@ -1,6 +1,9 @@
 name: iNeshast pinned images
 on:
   workflow_dispatch:
+  push:
+    branches: [codex/ineshast-deployment]
+    paths: [".github/workflows/ineshast-images.yml", "docker-build/Dockerfile.ineshast"]
 permissions:
   contents: read
   packages: write
@@ -51,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: docker-build/Dockerfile
+          file: docker-build/Dockerfile.ineshast
           platforms: linux/amd64
           push: true
           tags: ghcr.io/alirezamalekii/plugnmeet-server:${{ github.sha }}
