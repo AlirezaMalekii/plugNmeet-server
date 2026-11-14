@@ -21,6 +21,7 @@ RUN go mod download
 
 # Copy the rest of the application source code.
 COPY main.go ./
+COPY cmd/ cmd/
 COPY pkg/ pkg/
 COPY version/ version/
 
@@ -35,6 +36,8 @@ RUN case "$TARGETARCH" in \
     CGO_CFLAGS="-I$SPEECHSDK_ROOT/include/c_api" \
     CGO_LDFLAGS="-L$SPEECHSDK_ROOT/lib/${SPEECHSDK_ARCH_DIR} -lMicrosoft.CognitiveServices.Speech.core" \
     go build -trimpath -ldflags '-w -s -buildid=' -a -o plugnmeet-server main.go
+
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -o /go/src/app/speaking-observer ./cmd/speaking-observer
 
 # -------------------------
 # Final, lean image
@@ -63,3 +66,5 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["plugnmeet-server"]
 
 COPY --from=webclient /webclient/dist /app/client/dist
+
+COPY --from=builder /go/src/app/speaking-observer /usr/bin/speaking-observer
