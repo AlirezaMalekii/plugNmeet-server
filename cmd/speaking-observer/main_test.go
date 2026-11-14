@@ -95,3 +95,21 @@ func TestRecoverJournalClosesAtLastObservedTime(t *testing.T) {
 		t.Fatal("recovery must be idempotent")
 	}
 }
+
+func TestResolveSessionUsesLogicalPlugNmeetSID(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/auth/room/getActiveRoomInfo" || r.Header.Get("API-KEY") != "key" || r.Header.Get("HASH-SIGNATURE") == "" {
+			t.Error("missing authenticated native request")
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(`{"status":true,"room":{"room_info":{"room_id":"room","sid":"logical-session-uuid"}}}`))
+	}))
+	defer server.Close()
+	sid, err := resolveSession(context.Background(), server.URL, "key", "secret", "room")
+	if err != nil || sid != "logical-session-uuid" {
+		t.Fatalf("wrong session correlation: %q %v", sid, err)
+	}
+	if _, err = resolveSession(context.Background(), server.URL, "key", "secret", "different-room"); err == nil {
+		t.Fatal("must reject another logical room")
+	}
+}

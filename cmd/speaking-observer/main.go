@@ -10,7 +10,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/google/uuid"
 	"io"
 	"log"
 	"net/http"
@@ -22,6 +21,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/livekit/protocol/auth"
 	"github.com/livekit/protocol/livekit"
 	lksdk "github.com/livekit/server-sdk-go/v2"
@@ -47,13 +47,18 @@ func (j *journal) write(kind, identity, name string) {
 	}
 }
 func observe(ctx context.Context, info *livekit.Room, output, host, key, secret string) error {
-	// A SID-scoped filename separates repeated sessions using the same room name.
+	// Resolve the logical plugNmeet session before observing a physical LiveKit room.
+	session, err := resolveSession(ctx, os.Getenv("PLUGNMEET_URL"), os.Getenv("PLUGNMEET_API_KEY"), os.Getenv("PLUGNMEET_API_SECRET"), info.Name)
+	if err != nil {
+		return err
+	}
+	// Keep the physical SID in the filename for diagnostics, not as the recording session ID.
 	f, err := os.OpenFile(filepath.Join(output, info.Sid+"-"+uuid.NewString()+".jsonl"), os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	j := journal{file: f, room: info.Name, session: info.Sid}
+	j := journal{file: f, room: info.Name, session: session}
 	done := make(chan struct{})
 	var once sync.Once
 	room := lksdk.NewRoom(&lksdk.RoomCallback{
@@ -78,6 +83,10 @@ func observe(ctx context.Context, info *livekit.Room, output, host, key, secret 
 	}
 	if err = room.JoinWithToken(host, token, lksdk.WithAutoSubscribe(false)); err != nil {
 		return err
+	}
+	if room.SID() != info.Sid {
+		room.Disconnect()
+		return fmt.Errorf("LiveKit room generation changed while joining")
 	}
 	j.write("observer_connected", "", "")
 	select {
@@ -286,4 +295,48 @@ func recoverJournals(output string) error {
 		}
 	}
 	return nil
+}
+
+func resolveSession(ctx context.Context, baseURL, key, secret, roomName string) (string, error) {
+	if baseURL == "" || key == "" || secret == "" {
+		return "", fmt.Errorf("plugNmeet API credentials and URL are required for session correlation")
+	}
+	body, err := json.Marshal(map[string]string{"room_id": roomName})
+	if err != nil {
+		return "", err
+	}
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write(body)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, strings.TrimRight(baseURL, "/")+"/auth/room/getActiveRoomInfo", bytes.NewReader(body))
+	if err != nil {
+		return "", err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("API-KEY", key)
+	req.Header.Set("HASH-SIGNATURE", fmt.Sprintf("%x", mac.Sum(nil)))
+	client := &http.Client{Timeout: 15 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("session lookup HTTP %d", resp.StatusCode)
+	}
+	var result struct {
+		Status bool
+		Room   struct {
+			RoomInfo struct {
+				SID    string
+				RoomID string `json:"room_id"`
+			} `json:"room_info"`
+		}
+	}
+	if err := json.NewDecoder(io.LimitReader(resp.Body, 1024*1024)).Decode(&result); err != nil {
+		return "", err
+	}
+	if !result.Status || result.Room.RoomInfo.SID == "" || result.Room.RoomInfo.RoomID != roomName {
+		return "", fmt.Errorf("plugNmeet returned no matching active session")
+	}
+	return result.Room.RoomInfo.SID, nil
 }
