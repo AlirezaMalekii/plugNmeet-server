@@ -4,14 +4,15 @@
     "meet.ineshast.ir",
     "turn.ineshast.ir"
   ],
-  "deployed_source_sha": "6c5279549e51aaef409b6dca89d0864da1afe0c1",
+  "deployed_source_sha": "017f6706cd90a6afcbfa32491b2443b2b46faf51",
   "services_running": [
     "db",
     "redis",
     "nats",
     "livekit",
     "server",
-    "recorder"
+    "recorder",
+    "speaking-observer"
   ],
   "verified": {
     "https_root": 200,
@@ -31,16 +32,21 @@
     "systemd_timers": [
       "plugnmeet-health every5min",
       "plugnmeet-backup daily02:30UTC seven snapshots"
-    ]
+    ],
+    "livekit_version": "1.13.11",
+    "turn_proxy_protocol": "HAProxy PROXYv2 enabled; LiveKit trusts loopback proxy",
+    "immutable_images": "all seven services use pulled repository digests",
+    "observer_image_deployment": "017f670 logical-session fix deployed; actual speech and signed delivery still require media fixture",
+    "application_rollback_rehearsal": "017f670 -> e39d1ab -> 017f670; native create/active/join/end succeeded after each step",
+    "offsite_backup_schedule": "Mac hourly LaunchAgent ir.ineshast.plugnmeet-backups, first fetch exit 0, pinned SSH alias plugnmeet-production"
   },
   "pending": [
-    "observer image deployment",
     "browser media pilot two rooms ten users two recordings",
     "two independent networks and forced TURN",
     "speaker interval alignment real audio",
     "media recovery playback",
-    "application rollback rehearsal",
     "Core and Panel deployment",
     "default-provider activation after acceptance"
-  ]
+  ],
+  "last_checked_utc": "2026-11-14T18:04:23.749582+00:00"
 }

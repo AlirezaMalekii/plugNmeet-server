@@ -22,6 +22,10 @@ for attempt in {1..30}; do
     if curl --fail --silent http://127.0.0.1:18080/healthCheck >/dev/null; then
         docker compose -f compose.yml images --format json > "releases/$release.images.json"
         docker inspect $(docker compose -f compose.yml ps -q) --format '{{.Name}} {{.Image}} {{json .Config.Labels}}' > "releases/$release.containers.txt"
+        mkdir -p "releases/$release.runtime"
+        cp -a runtime/. "releases/$release.runtime/"
+        cp compose.yml "releases/$release.compose.yml"
+        cp /etc/haproxy/haproxy.cfg "releases/$release.haproxy.cfg"
         printf '%s\n' "$release" > releases/current
         exit 0
     fi

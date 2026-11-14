@@ -79,7 +79,8 @@ services:
       - ./runtime/recorder.yaml:/app/config.yaml:ro
       - recordings:/recording_files
     shm_size: 256m
-    mem_limit: 1400m
+    mem_limit: 2300m
+    memswap_limit: 3g
     cpus: 1.3
     depends_on: [server]
 volumes:

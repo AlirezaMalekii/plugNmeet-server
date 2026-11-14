@@ -75,7 +75,7 @@ write_yaml('livekit.yaml', {
     'redis': {'address': '127.0.0.1:16379', 'password': c['redis_password']},
     'keys': {c['livekit_key']: c['livekit_secret']},
     'webhook': {'api_key': c['livekit_key'], 'urls': ['http://127.0.0.1:18080/webhook']},
-    'turn': {'enabled': True, 'udp_port': 443, 'tls_port': 5349, 'external_tls': True, 'domain': args.turn},
+    'turn': {'enabled': True, 'udp_port': 443, 'tls_port': 5349, 'external_tls': True, 'domain': args.turn, 'proxy_protocol': True, 'proxy_protocol_trusted_cidrs': ['127.0.0.0/8']},
     'logging': {'level': 'warn'},
     'room': {'enable_remote_unmute': True},
 })
@@ -84,7 +84,7 @@ for old, new in [('UD4JADBMDSQCA5D475KSMFV43TAINASJ3TIEFQ7LP43XENPMQYFTRFKP', c[
     nats = nats.replace(old, new)
 (runtime / 'nats.conf').write_text(nats)
 (runtime / 'redis.conf').write_text('appendonly yes\nmaxmemory 100mb\nmaxmemory-policy noeviction\nrequirepass ' + c['redis_password'] + '\n')
-(runtime / 'observer.env').write_text('LIVEKIT_URL=ws://host.docker.internal:7880\nLIVEKIT_API_KEY=' + c['livekit_key'] + '\nLIVEKIT_API_SECRET=' + c['livekit_secret'] + '\nSPEAKING_OUTPUT=/data/speaking\nSPEAKING_WEBHOOK_URL=https://api.ineshast.ir/api/v1/webhooks/plugnmeet\nPLUGNMEET_API_KEY=' + c['api_key'] + '\nPLUGNMEET_API_SECRET=' + c['api_secret'] + '\n')
+(runtime / 'observer.env').write_text('LIVEKIT_URL=ws://host.docker.internal:7880\nLIVEKIT_API_KEY=' + c['livekit_key'] + '\nLIVEKIT_API_SECRET=' + c['livekit_secret'] + '\nSPEAKING_OUTPUT=/data/speaking\nPLUGNMEET_URL=https://' + args.host + '\nSPEAKING_WEBHOOK_URL=https://api.ineshast.ir/api/v1/webhooks/plugnmeet\nPLUGNMEET_API_KEY=' + c['api_key'] + '\nPLUGNMEET_API_SECRET=' + c['api_secret'] + '\n')
 # Redis drops privileges before reading configuration. Parent runtime stays 0700.
 (runtime / 'redis.conf').chmod(0o644)
 (runtime / 'db.env').write_text('MARIADB_DATABASE=plugnmeet\nMARIADB_USER=plugnmeet\nMARIADB_PASSWORD=' + c['db_password'] + '\nMARIADB_ROOT_PASSWORD=' + c['db_root_password'] + '\n')
