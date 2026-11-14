@@ -129,7 +129,7 @@ func sendJournal(ctx context.Context,client *http.Client,path,url,key,secret str
  if err!=nil{return err}
  sum:=sha256.Sum256(body)
  enc:=base64.RawURLEncoding.EncodeToString
- header:=enc([]byte("{"alg":"HS256","typ":"JWT"}"))
+ header:=enc([]byte(`{"alg":"HS256","typ":"JWT"}`))
  claims,_:=json.Marshal(map[string]any{"iss":key,"exp":time.Now().Add(5*time.Minute).Unix(),"sha256":base64.StdEncoding.EncodeToString(sum[:])})
  token:=header+"."+enc(claims)
  mac:=hmac.New(sha256.New,[]byte(secret));mac.Write([]byte(token));token+="."+enc(mac.Sum(nil))

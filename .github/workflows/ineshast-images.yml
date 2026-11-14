@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches: [codex/ineshast-deployment]
-    paths: [".github/workflows/ineshast-images.yml", "docker-build/Dockerfile.ineshast"]
+    paths: [".github/workflows/ineshast-images.yml", "docker-build/Dockerfile.ineshast", "cmd/**"]
 permissions:
   contents: read
   packages: write
