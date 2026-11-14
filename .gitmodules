@@ -1,0 +1,6 @@
+[submodule "components/client"]
+	path = components/client
+	url = https://github.com/mynaparrot/plugNmeet-client.git
+[submodule "components/recorder"]
+	path = components/recorder
+	url = https://github.com/mynaparrot/plugNmeet-recorder.git
