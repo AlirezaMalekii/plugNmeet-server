@@ -3,6 +3,15 @@ package main
 
 import (
  "context"
+ "bufio"
+ "bytes"
+ "crypto/hmac"
+ "crypto/sha256"
+ "encoding/base64"
+ "io"
+ "net/http"
+ "strings"
+ "github.com/google/uuid"
  "encoding/json"
  "fmt"
  "log"
@@ -33,7 +42,7 @@ func (j *journal) write(kind, identity, name string) {
 }
 func observe(ctx context.Context, info *livekit.Room, output, host, key, secret string) error {
  // A SID-scoped filename separates repeated sessions using the same room name.
- f,err:=os.OpenFile(filepath.Join(output,info.Sid+".jsonl"),os.O_CREATE|os.O_APPEND|os.O_WRONLY,0600)
+ f,err:=os.OpenFile(filepath.Join(output,info.Sid+"-"+uuid.NewString()+".jsonl"),os.O_CREATE|os.O_APPEND|os.O_WRONLY,0600)
  if err!=nil{return err}
  defer f.Close()
  j:=journal{file:f,room:info.Name,session:info.Sid}
@@ -60,6 +69,7 @@ func observe(ctx context.Context, info *livekit.Room, output, host, key, secret 
  select {case <-ctx.Done():case <-done:}
  room.Disconnect()
  j.write("observer_disconnected","","")
+ if err:=os.WriteFile(f.Name()+".ready",[]byte("ready"),0600);err!=nil{return err}
  return nil
 }
 func main(){
@@ -69,6 +79,7 @@ func main(){
  if output==""{output="/data/speaking"}
  if err:=os.MkdirAll(output,0700);err!=nil{log.Fatal(err)}
  ctx,cancel:=signal.NotifyContext(context.Background(),syscall.SIGINT,syscall.SIGTERM);defer cancel()
+ go deliver(ctx,output)
  client:=lksdk.NewRoomServiceClient(host,key,secret)
  var mu sync.Mutex
  active:=map[string]bool{}
@@ -89,4 +100,42 @@ func main(){
    }(info)
   }
  }
+}
+
+func deliver(ctx context.Context, output string) {
+ url, key, secret:=os.Getenv("SPEAKING_WEBHOOK_URL"),os.Getenv("PLUGNMEET_API_KEY"),os.Getenv("PLUGNMEET_API_SECRET")
+ if url==""||key==""||secret=="" {log.Print("speaking webhook delivery disabled: credentials or URL missing");return}
+ client:=&http.Client{Timeout:20*time.Second}
+ tick:=time.NewTicker(5*time.Second);defer tick.Stop()
+ for {
+  select {case <-ctx.Done():return;case <-tick.C:}
+  paths,err:=filepath.Glob(filepath.Join(output,"*.jsonl.ready"))
+  if err!=nil {log.Print(err);continue}
+  for _,path:=range paths {
+   if err:=sendJournal(ctx,client,strings.TrimSuffix(path,".ready"),url,key,secret);err!=nil {log.Printf("speaking delivery retry: %v",err);continue}
+   if err:=os.Rename(path,strings.TrimSuffix(path,".ready")+".sent");err!=nil {log.Print(err)}
+  }
+ }
+}
+func sendJournal(ctx context.Context,client *http.Client,path,url,key,secret string) error {
+ f,err:=os.Open(path);if err!=nil{return err};defer f.Close()
+ rows:=[]map[string]any{}
+ scan:=bufio.NewScanner(f);scan.Buffer(make([]byte,4096),1024*1024)
+ for scan.Scan(){var row map[string]any;if err:=json.Unmarshal(scan.Bytes(),&row);err!=nil{return err};rows=append(rows,row)}
+ if err:=scan.Err();err!=nil{return err}
+ if len(rows)==0{return fmt.Errorf("empty speaking journal")}
+ id:=uuid.NewSHA1(uuid.NameSpaceOID,[]byte(filepath.Base(path))).String()
+ body,err:=json.Marshal(map[string]any{"id":id,"event":"ineshast_speaking_events","createdAt":time.Now().Unix(),"room":map[string]any{"room_id":rows[0]["room_id"],"sid":rows[0]["room_sid"]},"speaking_events":rows})
+ if err!=nil{return err}
+ sum:=sha256.Sum256(body)
+ enc:=base64.RawURLEncoding.EncodeToString
+ header:=enc([]byte("{"alg":"HS256","typ":"JWT"}"))
+ claims,_:=json.Marshal(map[string]any{"iss":key,"exp":time.Now().Add(5*time.Minute).Unix(),"sha256":base64.StdEncoding.EncodeToString(sum[:])})
+ token:=header+"."+enc(claims)
+ mac:=hmac.New(sha256.New,[]byte(secret));mac.Write([]byte(token));token+="."+enc(mac.Sum(nil))
+ req,err:=http.NewRequestWithContext(ctx,http.MethodPost,url,bytes.NewReader(body));if err!=nil{return err}
+ req.Header.Set("Content-Type","application/json");req.Header.Set("Authorization",token)
+ resp,err:=client.Do(req);if err!=nil{return err};defer resp.Body.Close();io.Copy(io.Discard,io.LimitReader(resp.Body,4096))
+ if resp.StatusCode<200||resp.StatusCode>=300{return fmt.Errorf("webhook HTTP %d",resp.StatusCode)}
+ return nil
 }
