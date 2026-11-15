@@ -1,10 +1,10 @@
 # Implementation checkpoint, 2026-11-15
 
 ## Goal and account boundary
-Shared-server Docker deployment, source synchronized with AlirezaMalekii/plugNmeet-server, complete documentation, plugNmeet alongside BBB in iNeshast, recordings/audio and speech intervals, then default activation after acceptance. User requests safe wrap at20percent account quota remaining and stop before10percent. Current slice has28percent remaining and all browser pilots ended. Check quota before further work.
+Shared-server Docker deployment, source synchronized with AlirezaMalekii/plugNmeet-server, complete documentation, plugNmeet alongside BBB in iNeshast, recordings/audio and speech intervals, then default activation after acceptance. User requests safe wrap at20percent account quota remaining and stop before10percent. Current slice reached22percent remaining. All browser pilots ended and both browsers closed. Only CI observation and safe wrap remain in this slice.
 
 ## Verified current state
-- iNeshast branch codex/plugnmeet-provider, draft PR9, most recent pushed commit edfacf4. Original clean baseline03f03ef. Core and Panel are not deployed and provider default remainsBBB.
+- iNeshast branch codex/plugnmeet-provider, draft PR9, most recent pushed commit93b2178. Original clean baseline03f03ef. Core and Panel are not deployed and provider default remainsBBB.
 - plugNmeet branch codex/ineshast-deployment, PR1. origin is user's fork, upstream official. Components are pinned submodules. All47 official pages including25API pages archived with checksums and Persian reference.
 - SSH alias plugnmeet-production uses a dedicated Mac key and pinned host key. Root password was rotated into Mac Keychain; password SSH is disabled. Do not rotate again.
 - Server94.184.47.206 now also runs AqayHerz shop/consultation/landing services. Preserve their shared HAProxy routes, data and networks. The plugNmeet rollback helper restores only owned backends and was validated against live shared configuration.
@@ -23,12 +23,12 @@ Shared-server Docker deployment, source synchronized with AlirezaMalekii/plugNme
 - Native PHP400 was an explicitly empty optional URI logout_url. It is now omitted when empty and native PHP smoke passed.
 - File creation_time is asset-ready time, not media start. Core uses signed start_recording createdAt correlated by room, logicalSID and recording_info.record_id. Missing start marker defers speech processing.
 - Late recording discovery replays that session's journals. Inbox retries are ordered by updated_at then id, rotating failed attempts so101old invalid rows cannot starve a new valid event.
-- PR9 full functional suite and MySQL checks passed, but final PHPStan stage reported12 type errors. A bounded type-annotation fix is active in core_finish agent. Inspect fresh worktree and CI before committing or deploying. Do not suppress errors via baselines.
+- PR9 full functional suite and MySQL checks passed. Twelve final PHPStan errors were corrected in93b2178 with four PHPDoc lines declaring relation generics and the speaking-state shape. Targeted PHPStan on ten related files, Pint, and fourteen regressions with37assertions passed. Updated full CI is pending. No baseline or ignore changes were made.
 - Recording reconciliation currently scans a three-day updated_at window and fetches at most100artifacts. Very late or larger histories need manual sync or a later scoped improvement.
 
 ## Next steps
 1. Reconcile this file with current Git status, PRs and quota. Private evidence is under ~/Library/Application Support/plugNmeet/pilot and private/recovery. Temporary files and browser sessions may disappear across interruption.
-2. Finish and validate current PHPStan fixes, commit/push, and require all PR9 checks before merge/deploy.
+2. Observe the new full CI for93b2178 and require all PR9 checks before merge/deploy. The type fixes are already committed and pushed.
 3. Finish source PR1 integration and synchronize local main with user's fork main after passing checks.
 4. Deploy Core/Panel with matching private API credentials, database queue and inbox migration. Keep selection/default gated while testing signed webhook and recording ingestion end to end.
 5. Complete ten-user/two-room/two-recorder capacity, independent-network, screen share, TURN TCP/TLS and overlapping-speaker tests. Activate plugNmeet default only after full acceptance.
