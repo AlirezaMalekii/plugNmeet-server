@@ -25,6 +25,7 @@ import (
 	"github.com/livekit/protocol/auth"
 	"github.com/livekit/protocol/livekit"
 	lksdk "github.com/livekit/server-sdk-go/v2"
+	"github.com/pion/webrtc/v4"
 )
 
 type journal struct {
@@ -63,6 +64,24 @@ func observe(ctx context.Context, info *livekit.Room, output, host, key, secret 
 	var once sync.Once
 	room := lksdk.NewRoom(&lksdk.RoomCallback{
 		ParticipantCallback: lksdk.ParticipantCallback{
+			OnTrackPublished: func(publication *lksdk.RemoteTrackPublication, participant *lksdk.RemoteParticipant) {
+				if publication.Kind() == lksdk.TrackKindAudio {
+					if err := publication.SetSubscribed(true); err != nil {
+						log.Printf("subscribe audio: %v", err)
+					}
+				}
+			},
+			OnTrackSubscribed: func(track *webrtc.TrackRemote, publication *lksdk.RemoteTrackPublication, participant *lksdk.RemoteParticipant) {
+				// Drain RTP without decoding or storing media. LiveKit scopes speaking
+				// notifications to subscribed publishers.
+				go func() {
+					for {
+						if _, _, err := track.ReadRTP(); err != nil {
+							return
+						}
+					}
+				}()
+			},
 			OnIsSpeakingChanged: func(p lksdk.Participant) {
 				kind := "speech_ended"
 				if p.IsSpeaking() {
@@ -75,8 +94,9 @@ func observe(ctx context.Context, info *livekit.Room, output, host, key, secret 
 		OnDisconnected:            func() { once.Do(func() { close(done) }) },
 	})
 	no := false
-	token, err := auth.NewAccessToken(key, secret).SetIdentity("ineshast-observer-" + info.Sid).
-		SetVideoGrant(&auth.VideoGrant{RoomJoin: true, Room: info.Name, Hidden: true, CanPublish: &no, CanSubscribe: &no}).
+	yes := true
+	token, err := auth.NewAccessToken(key, secret).SetIdentity("pnm_agent-ineshast-observer-" + info.Sid).
+		SetVideoGrant(&auth.VideoGrant{RoomJoin: true, Room: info.Name, Hidden: true, CanPublish: &no, CanSubscribe: &yes}).
 		SetValidFor(10 * time.Minute).ToJWT()
 	if err != nil {
 		return err
@@ -87,6 +107,17 @@ func observe(ctx context.Context, info *livekit.Room, output, host, key, secret 
 	if room.SID() != info.Sid {
 		room.Disconnect()
 		return fmt.Errorf("LiveKit room generation changed while joining")
+	}
+	for _, participant := range room.GetRemoteParticipants() {
+		for _, publication := range participant.TrackPublications() {
+			if publication.Kind() == lksdk.TrackKindAudio {
+				if remote, ok := publication.(*lksdk.RemoteTrackPublication); ok {
+					if err := remote.SetSubscribed(true); err != nil {
+						log.Printf("subscribe existing audio: %v", err)
+					}
+				}
+			}
+		}
 	}
 	j.write("observer_connected", "", "")
 	select {
