@@ -1,0 +1,88 @@
+{
+  "host": "94.184.47.206",
+  "domains": [
+    "meet.ineshast.ir",
+    "turn.ineshast.ir"
+  ],
+  "deployed_source_sha": "7461dcfb771cb9ceb5cb7ee81684cc5cd9067493",
+  "services_running": [
+    "db",
+    "redis",
+    "nats",
+    "livekit",
+    "server",
+    "recorder",
+    "speaking-observer"
+  ],
+  "verified": {
+    "https_root": 200,
+    "https_health": "Healthy",
+    "tls_certificate_expiry": "2027-02-12",
+    "tls_renewal_dry_run": "passed",
+    "docker_bridge_to_livekit_api": "passed via nc",
+    "nats_generated_keys": "server and recorder authenticated successfully",
+    "native_api_smoke": [
+      "room/create success",
+      "room/isRoomActive true",
+      "room/getJoinToken issued",
+      "room/endRoom success"
+    ],
+    "encrypted_backup": "20261114T103336Z.tar.gz.age copied to Mac",
+    "recovery_rehearsal": "decrypted backup and imported four tables into isolated no-network MariaDB; test container removed",
+    "systemd_timers": [
+      "plugnmeet-health every5min",
+      "plugnmeet-backup daily02:30UTC seven snapshots"
+    ],
+    "livekit_version": "1.13.11",
+    "turn_proxy_protocol": "HAProxy PROXYv2 enabled; LiveKit trusts loopback proxy",
+    "immutable_images": "all seven services use pulled repository digests",
+    "observer_image_deployment": "7461dcf deployed; audio subscriptions enabled, logical session IDs and speech transitions verified.",
+    "application_rollback_rehearsal": "017f670 -> e39d1ab -> 017f670; native create/active/join/end succeeded after each step",
+    "offsite_backup_schedule": "Mac hourly LaunchAgent ir.ineshast.plugnmeet-backups, first fetch exit 0, pinned SSH alias plugnmeet-production",
+    "controlled_speech": {
+      "room_sid": "3ab6849b-c094-4333-b04e-52bf9eeacb8e",
+      "synthetic_source_duration_seconds": 15.007,
+      "first_observer_transition_delay_ms": 975,
+      "last_observer_transition_delay_ms": 1593,
+      "speech_started_events": 3,
+      "speech_ended_events": 3,
+      "rtc_audio_energy_nonzero": true,
+      "recording_video_codec": "h264",
+      "recording_audio_codec": "pcm_s16le",
+      "recording_duration_seconds": 72.067833,
+      "recorded_audio_first_sound_seconds": 14.017542,
+      "recorded_audio_last_sound_seconds": 29.227625,
+      "native_recording_start_log_utc": "2026-11-15T09:59:19Z",
+      "first_boundary_error_using_native_start_second": 0.686458,
+      "last_boundary_error_using_native_start_second": 1.101375,
+      "scope": "One same-Mac synthetic participant, observer journal and decoded native MP4. Core production webhook ingestion and two-user overlap remain pending."
+    },
+    "shared_proxy_rollback": "Owned-backend merge unit tests passed, validated against live config and preserved AqayHerz backend/routes.",
+    "forced_turn_udp": {
+      "candidate_type": "relay",
+      "policy": "relay",
+      "connection": "connected",
+      "inbound_audio_bytes": 188500,
+      "inbound_audio_packets": 750,
+      "scope": "Two synthetic participants on the same Mac; UDP TURN proven, independent networks and TCP/TLS still pending."
+    },
+    "media_recovery": {
+      "encrypted_snapshot": "20261115T023617Z.tar.gz.age",
+      "offsite_download_complete": true,
+      "restored_media_bytes": 25456862,
+      "sha256": "106baaac3d5ec6d0cfee432b33589a6b2886194a11076830b03049f11799ce83",
+      "source_checksum_matches": true,
+      "restored_audio_video_decode_exit_code": 0
+    }
+  },
+  "pending": [
+    "two rooms ten users two recordings capacity",
+    "two independent networks",
+    "screen sharing",
+    "TURN TCP/TLS",
+    "Core PHPStan fixes and final CI",
+    "Core and Panel production deployment and signed webhook roundtrip",
+    "default provider activation after full acceptance"
+  ],
+  "last_checked_utc": "2026-11-14T18:04:23.749582+00:00"
+}

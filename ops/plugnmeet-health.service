@@ -1,0 +1,6 @@
+[Unit]
+Description=Check plugNmeet API and disk capacity
+After=docker.service haproxy.service
+[Service]
+Type=oneshot
+ExecStart=/opt/plugnmeet/ops/health.sh
