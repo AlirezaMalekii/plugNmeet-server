@@ -73,16 +73,36 @@
       "sha256": "106baaac3d5ec6d0cfee432b33589a6b2886194a11076830b03049f11799ce83",
       "source_checksum_matches": true,
       "restored_audio_video_decode_exit_code": 0
-    }
+    },
+    "distributed_capacity": {
+      "concurrent_participants": [
+        5,
+        5
+      ],
+      "github_runner_count": 4,
+      "github_guest_sessions": 8,
+      "all_guests_sent_received_audio_video": true,
+      "recording_durations_seconds": [
+        260.515917,
+        240.3
+      ],
+      "recordings_with_audio_and_video": 2,
+      "screen_share_received": "synthetic canvas 1280x720 on separate listener",
+      "recorder_cpu_percent": 131.27,
+      "recorder_memory_gib": 1.32,
+      "host_load_average_1m": 18.84,
+      "shared_site_health_samples_200": 6,
+      "run": "https://github.com/AlirezaMalekii/plugNmeet-server/actions/runs/43730920828",
+      "scope": "2 Mac moderators and 8 synthetic GitHub-hosted participants; physical mic and OS picker not exercised."
+    },
+    "independent_networks": "Mac and GitHub-hosted runner exchanged audio/video, run43730494740."
   },
   "pending": [
-    "two rooms ten users two recordings capacity",
-    "two independent networks",
-    "screen sharing",
+    "iNeshast production deploy retry after private GHCR core image CDN reset",
+    "signed webhook recording and speaking end-to-end on deployed Core",
+    "overlapping speech timing",
     "TURN TCP/TLS",
-    "Core PHPStan fixes and final CI",
-    "Core and Panel production deployment and signed webhook roundtrip",
-    "default provider activation after full acceptance"
+    "activate plugNmeet default only after acceptance"
   ],
   "last_checked_utc": "2026-11-14T18:04:23.749582+00:00"
 }
