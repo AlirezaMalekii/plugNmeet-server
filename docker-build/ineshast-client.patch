@@ -1422,10 +1422,10 @@ index 72a626c8..53a8f560 100644
  
    --radius-tlbl-d: 0 0 20px 20px;
 diff --git a/vite.config.ts b/vite.config.ts
-index 3827a192..23002d69 100644
+index 3827a192..11951cfe 100644
 --- a/vite.config.ts
 +++ b/vite.config.ts
-@@ -47,6 +47,24 @@ export default defineConfig({
+@@ -47,6 +47,27 @@ export default defineConfig({
      },
    },
    plugins: [
@@ -1444,13 +1444,16 @@ index 3827a192..23002d69 100644
 +          .replace(/"Sticky note"/g, '"یادداشت چسبان"')
 +          .replace(/"Web Embed"/g, '"افزونهٔ وب"')
 +          .replace(/"Generate"/g, '"ساختن"')
-+          .replace(/"Mermaid to Excalidraw"/g, '"تبدیل نمودار به تخته"');
++          .replace(/"Mermaid to Excalidraw"/g, '"تبدیل نمودار به تخته"')
++          .replace(/مرمید به excalidraw/g, 'تبدیل نمودار به تخته')
++          .replace(/مرمید syntax/g, 'دستور نمودار')
++          .replace(/children:"AI"/g, 'children:"هوشمند"');
 +      },
 +    },
      react(),
      tailwindcss(),
      viteStaticCopy(getStaticFilesToCopy()),
-@@ -93,6 +111,7 @@ function getStaticFilesToCopy(): ViteStaticCopyOptions {
+@@ -93,6 +114,7 @@ function getStaticFilesToCopy(): ViteStaticCopyOptions {
            'assets/audio',
            'assets/backgrounds',
            'assets/imgs',
