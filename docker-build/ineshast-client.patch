@@ -21,7 +21,7 @@ index 00000000..6ef124da
 +<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="i" x2="1" y2="1"><stop stop-color="#4F46E5"/><stop offset="1" stop-color="#7C3AED"/></linearGradient></defs><rect width="64" height="64" rx="20" fill="url(#i)"/><path d="M17 22a7 7 0 0 1 7-7h16a7 7 0 0 1 7 7v14a7 7 0 0 1-7 7H29l-9 7v-9a7 7 0 0 1-3-5Z" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/><path d="M25 27v6m7-12v18m7-14v10" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle cx="47" cy="17" r="5" fill="#C4B5FD" stroke="#4F46E5" stroke-width="2"/></svg>
 \ No newline at end of file
 diff --git a/src/assets/locales/fa-IR/translation.json b/src/assets/locales/fa-IR/translation.json
-index 3c2d0144..b6e4fc2e 100644
+index 3c2d0144..ee6fb2ef 100644
 --- a/src/assets/locales/fa-IR/translation.json
 +++ b/src/assets/locales/fa-IR/translation.json
 @@ -14,7 +14,20 @@
@@ -139,15 +139,17 @@ index 3c2d0144..b6e4fc2e 100644
        "external-media-player-starting": "در حال آماده‌سازی ویدیو برای پخش، لطفاً صبر کنید.",
        "screenshare-error": "اشتراک‌گذاری صفحه شروع نشد."
      },
-@@ -507,7 +552,7 @@
+@@ -507,8 +552,8 @@
        "webcam-resolution": {
          "h2160": "4K (2160p)",
          "h1440": "۱۴۴۰p",
 -        "h1080": "Full HD (1080p)",
+-        "h720": "HD (720p)",
 +        "h1080": "وضوح کامل (۱۰۸۰)",
-         "h720": "HD (720p)",
++        "h720": "وضوح بالا (۷۲۰)",
          "h540": "۵۴۰p",
          "h360": "۳۶۰p",
+         "h216": "۲۱۶ صفحه",
 @@ -584,7 +629,7 @@
      "export-pdf-no-pages-to-export": "هیچ صفحه‌ای با محتوا برای خروجی وجود ندارد.",
      "export-pdf-no-pages-with-content": "هیچ صفحه‌ای با محتوا برای خروجی پیدا نشد.",
@@ -364,6 +366,32 @@ index 3c2d0144..b6e4fc2e 100644
 +    }
    }
  }
+diff --git a/src/components/app/index.tsx b/src/components/app/index.tsx
+index 0d7b673c..cc297d61 100644
+--- a/src/components/app/index.tsx
++++ b/src/components/app/index.tsx
+@@ -151,7 +151,7 @@ const App = () => {
+       <ErrorBoundary autoRemount>
+         <main
+           className="plugNmeet-app overflow-hidden h-full flex flex-col"
+-          aria-label="Main content"
++          aria-label="محتوای جلسه"
+         >
+           <Header />
+           <MainAreaWithPip />
+diff --git a/src/components/chat/messages/index.tsx b/src/components/chat/messages/index.tsx
+index ffaa2df5..e25d66db 100644
+--- a/src/components/chat/messages/index.tsx
++++ b/src/components/chat/messages/index.tsx
+@@ -270,7 +270,7 @@ const Messages = ({ messageKey, isRecorder }: IMessagesProps) => {
+         onScroll={handleScroll}
+         tabIndex={0}
+         role="log"
+-        aria-label="Chat messages"
++        aria-label="پیام‌های گفتگو"
+         aria-live="polite"
+       >
+         {windowStart > 0 && (
 diff --git a/src/components/footer/icons/mic-menu/index.tsx b/src/components/footer/icons/mic-menu/index.tsx
 index 9f62ea87..bdb08b8b 100644
 --- a/src/components/footer/icons/mic-menu/index.tsx
@@ -437,6 +465,19 @@ index f9f0756d..c7f65e15 100644
          </div>
        </div>
      </footer>
+diff --git a/src/components/footer/modals/rtmpModal.tsx b/src/components/footer/modals/rtmpModal.tsx
+index f0b611c0..ff779c0f 100644
+--- a/src/components/footer/modals/rtmpModal.tsx
++++ b/src/components/footer/modals/rtmpModal.tsx
+@@ -212,7 +212,7 @@ const RtmpModal = () => {
+               label={t('footer.modal.rtmp-stream-key')}
+               id="stream-key"
+               maxWidthClass="sm:max-w-[300px]"
+-              placeholder="xxxx-xxxx-xxxx-xxxx"
++              placeholder="کلید پخش را وارد کنید"
+               value={serverKey}
+               onChange={(e) => {
+                 setServerKey(e.currentTarget.value);
 diff --git a/src/components/footer/modals/webcam/backgroundItems.tsx b/src/components/footer/modals/webcam/backgroundItems.tsx
 index 9c762fc4..f8441d4c 100644
 --- a/src/components/footer/modals/webcam/backgroundItems.tsx
@@ -575,6 +616,72 @@ index 6866f47a..4a178740 100644
        <SettingsSwitch
          label={t('header.room-settings.enable-dark-theme')}
          enabled={theme === 'dark'}
+diff --git a/src/components/header/room-settings/ingress.tsx b/src/components/header/room-settings/ingress.tsx
+index 797dee32..84e284bb 100644
+--- a/src/components/header/room-settings/ingress.tsx
++++ b/src/components/header/room-settings/ingress.tsx
+@@ -17,7 +17,7 @@ import FormattedInputField from '../../../helpers/ui/formattedInputField';
+ 
+ const Ingress = () => {
+   const { t } = useTranslation();
+-  const [name, setName] = useState<string>('broadcaster');
++  const [name, setName] = useState<string>('پخش‌کننده');
+   const [ingressType, setIngressType] = useState<IngressInput>(IngressInput.RTMP_INPUT);
+   const [isLoading, setIsLoading] = useState<boolean>(false);
+   const session = store.getState().session;
+@@ -34,7 +34,7 @@ const Ingress = () => {
+ 
+     const body = create(CreateIngressReqSchema, {
+       inputType: ingressType,
+-      participantName: name || 'broadcaster',
++      participantName: name || 'پخش‌کننده',
+       roomId: session.currentRoom.roomId,
+     });
+ 
+@@ -98,7 +98,7 @@ const Ingress = () => {
+           id="name"
+           value={name}
+           onChange={(e) => setName(e.currentTarget.value)}
+-          placeholder="broadcaster"
++          placeholder="پخش‌کننده"
+         />
+         <div className="flex justify-end mt-4">
+           <button
+diff --git a/src/components/insights-ai/ai-text-chat/display/index.tsx b/src/components/insights-ai/ai-text-chat/display/index.tsx
+index 69c6bbe6..66e2d379 100644
+--- a/src/components/insights-ai/ai-text-chat/display/index.tsx
++++ b/src/components/insights-ai/ai-text-chat/display/index.tsx
+@@ -132,7 +132,7 @@ const InsightsAiTextChat = () => {
+                     <button
+                       className="cursor-pointer focus-ring relative z-30 transition-opacity ai-chat-scroll-btn"
+                       onClick={forceScrollToBottom}
+-                      aria-label="Scroll to bottom"
++                      aria-label={t('right-panel.scroll-to-bottom')}
+                     >
+                       <ScrollToBottomIconSVG />
+                     </button>
+@@ -141,7 +141,7 @@ const InsightsAiTextChat = () => {
+                     ref={closeBtnRef}
+                     className="cursor-pointer focus-ring relative z-30 ai-chat-close-btn"
+                     onClick={close}
+-                    aria-label="Close"
++                    aria-label={t('close')}
+                   >
+                     <PopupCloseSVGIcon classes="text-Gray-600" />
+                   </button>
+diff --git a/src/components/insights-ai/ai-text-chat/display/textBoxArea.tsx b/src/components/insights-ai/ai-text-chat/display/textBoxArea.tsx
+index a0db47c9..1a74dd08 100644
+--- a/src/components/insights-ai/ai-text-chat/display/textBoxArea.tsx
++++ b/src/components/insights-ai/ai-text-chat/display/textBoxArea.tsx
+@@ -64,7 +64,7 @@ const TextBoxArea = ({ onSend, isAwaitingResponse }: TextBoxAreaProps) => {
+       <button
+         disabled={isSendButtonDisabled}
+         onClick={sendMsg}
+-        aria-label="Send message"
++        aria-label="ارسال پیام"
+         className={`focus-ring w-7 3xl:w-9 h-7 3xl:h-9 flex items-center justify-center rounded-full transition-all duration-300 hover:bg-[#00A1F2] hover:border-[#08C] ${
+           isSendButtonDisabled
+             ? 'bg-[#00A1F2]/30 border border-[#08C]/30 cursor-not-allowed'
 diff --git a/src/components/landing/index.tsx b/src/components/landing/index.tsx
 index 0cf97b54..18c2b2fe 100644
 --- a/src/components/landing/index.tsx
@@ -797,6 +904,19 @@ index e6a07315..dd71c6a4 100644
                    >
                      <i className="icon pnm-pip text-[14px] text-white" />
                    </button>
+diff --git a/src/components/polls/pollsList.tsx b/src/components/polls/pollsList.tsx
+index 748500dd..719c1e5b 100644
+--- a/src/components/polls/pollsList.tsx
++++ b/src/components/polls/pollsList.tsx
+@@ -20,7 +20,7 @@ const PollsList = () => {
+     <div
+       className="polls-list-wrapper relative overflow-auto scrollBar px-3 3xl:px-5 pt-2 xl:pt-3 h-[204px] md:h-[calc(100vh-220px)] 3xl:h-[calc(100vh-277px)]"
+       tabIndex={0}
+-      aria-label="Polls list"
++      aria-label="فهرست رأی‌گیری‌ها"
+     >
+       <div className="polls-list-wrap-inner grid gap-4">
+         {polls.map((poll, index) => (
 diff --git a/src/helpers/dimensions.ts b/src/helpers/dimensions.ts
 index dafdef1a..54d7f9a2 100644
 --- a/src/helpers/dimensions.ts
@@ -897,6 +1017,32 @@ index e8debe2d..ac68e1ca 100644
        store.dispatch(updateCurrentUserMetadata(metadata));
        store.dispatch(updateIsActiveRaisehand(!!metadata.raisedHand?.isRaised));
      }
+diff --git a/src/helpers/ui/modal.tsx b/src/helpers/ui/modal.tsx
+index e7dcc949..2fba939b 100644
+--- a/src/helpers/ui/modal.tsx
++++ b/src/helpers/ui/modal.tsx
+@@ -121,7 +121,7 @@ const Modal = ({
+                   data-autofocus
+                   className="cursor-pointer focus-ring"
+                   onClick={() => setIsOpen(false)}
+-                  aria-label="Close"
++                  aria-label="بستن"
+                 >
+                   <PopupCloseSVGIcon classes="text-Gray-600 dark:text-white" />
+                 </Button>
+diff --git a/src/helpers/ui/rangeSlider.tsx b/src/helpers/ui/rangeSlider.tsx
+index 11cdb24d..a83d19f5 100644
+--- a/src/helpers/ui/rangeSlider.tsx
++++ b/src/helpers/ui/rangeSlider.tsx
+@@ -174,7 +174,7 @@ const RangeSlider = ({
+           aria-valuemin={min}
+           aria-valuemax={max}
+           aria-valuenow={value}
+-          aria-label={label ?? 'Slider'}
++          aria-label={label ?? 'تنظیم مقدار'}
+           style={{
+             insetInlineStart: `${fillPercentage}%`,
+             width: `${thumbSize}px`,
 diff --git a/src/index.html b/src/index.html
 index 61a80ee4..b35fb1f8 100644
 --- a/src/index.html
