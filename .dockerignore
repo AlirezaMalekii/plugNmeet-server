@@ -1,1 +1,6 @@
 **/node_modules
+
+# Exclude Git metadata and local builds from the client build context.
+.git
+**/.git
+**/dist

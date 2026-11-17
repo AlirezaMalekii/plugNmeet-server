@@ -12,6 +12,20 @@ Run ineshast-images GitHub Actions at the exact source SHA. All mirrors and app 
 
 Deployment preserves prior image environment and records image/container identity after health succeeds. A successful release also snapshots its private runtime configuration, Compose file and installed HAProxy configuration. Rollback restores that matched set before starting the recorded immutable images. `rollback.sh PREVIOUS_HEALTHY_SHA` restores a recorded healthy release. Check database schema compatibility before upgrades and take backup first.
 
+## رابط فارسی جلسه
+
+ساخت `Dockerfile.ineshast` تغییرات رابط را روی commit ثابت زیرمخزن کلاینت اعمال می‌کند. فایل‌های ایران‌یکان از نشانی دارایی‌های آی‌نشست دریافت و با SHA-256 بررسی می‌شوند. در ساخت محلی، از مسیر `components/client` ابتدا `git apply ../../docker-build/ineshast-client.patch` را اجرا کنید. سپس فایل‌های `Shared/fonts/iranyekan/iranyekan{regular,bold}.woff` را به ترتیب به `components/client/src/assets/ineshast/{regular,bold}.woff` کپی کنید. سپس از مسیر کلاینت `pnpm install --frozen-lockfile` و `pnpm build` را اجرا کنید.
+
+در انتشار مستقیم نسخهٔ رابط، لایهٔ `client/dist` روی تصویر سرور نصب‌شده قرار می‌گیرد و فقط کانتینر وب از نو ساخته می‌شود. رسید در مسیر `/opt/plugnmeet/ops/releases/client-<SHA>` ثبت می‌شود. رسید میزبان شناسهٔ تصاویر قبل و بعد و commit رابط را نگه می‌دارد. نسخهٔ پشتیبان `.env` در همان پوشهٔ رسید قرار می‌گیرد. برای بازگشت رابط، در زمان خالی بودن اتاق‌ها آن را به `.env` بازگردانید و `docker compose up -d --no-deps --pull never server` و سپس `./health.sh` را اجرا کنید.
+
+### آزمون‌های تکمیلی رابط
+
+- یک جلسه با تعداد دوربین بیش از ظرفیت یک صفحه برگزار کنید. عبور از مرز صفحه، اسکرول، دوربین سنجاق‌شده و قطع و وصل دوربین را بررسی کنید تا هر تصویر در مسیر اسکرول و صفحه‌بندی قابل دسترسی بماند.
+- در سافاری آیفون و یک مرورگر اندرویدی در دو جهت نمایش، پیش‌نمایش، مجوز دستگاه، جابه‌جایی پنل و فهرست دوربین‌ها را امتحان کنید. سیستم مجوزها و ابعاد نمایش در این مرورگرها جداگانه عمل می‌کنند.
+- متن منوهای پیشرفتهٔ تختهٔ سفید، رأی‌گیری، اتاق گروهی، خطاهای دستگاه و صادر کردن گزارش را در نقش میزبان و مهمان بررسی کنید. این مسیرها متن‌هایی دارند که فقط هنگام اجرای همان قابلیت نمایش داده می‌شوند.
+- یک جلسهٔ دارای اشتراک‌گذاری صفحه و ضبط را پایان دهید و خروجی را بازبینی کنید. تصویر کلاس زنده و چیدمان ضبط از مسیرهای جداگانه تولید می‌شوند.
+- با حرکت کاهش‌یافته در تنظیمات سیستم، ناوبری با صفحه‌کلید و نمایشگر کوچک، تمرکز روی دکمه‌ها و خاموش بودن حرکت پس‌زمینه را جداگانه بررسی کنید.
+
 ## Certificate
 
 First issuance uses standalone80. Renewal uses standalone9080 through HAProxy ACME route. Host /etc/letsencrypt/cli.ini sets http-01-port9080. Install renew-certificate.sh in /etc/letsencrypt/renewal-hooks/deploy/plugnmeet-haproxy. Verify `certbot renew --dry-run --http-01-port 9080`. User supplied no ACME contact email, so supported no-email registration was selected.
