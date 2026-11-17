@@ -1422,10 +1422,10 @@ index 72a626c8..53a8f560 100644
  
    --radius-tlbl-d: 0 0 20px 20px;
 diff --git a/vite.config.ts b/vite.config.ts
-index 3827a192..11951cfe 100644
+index 3827a192..8334154c 100644
 --- a/vite.config.ts
 +++ b/vite.config.ts
-@@ -47,6 +47,27 @@ export default defineConfig({
+@@ -47,6 +47,30 @@ export default defineConfig({
      },
    },
    plugins: [
@@ -1433,6 +1433,9 @@ index 3827a192..11951cfe 100644
 +      name: 'ineshast-whiteboard-persian',
 +      transform(source, id) {
 +        if (!id.includes('/@excalidraw/excalidraw/dist/')) return;
++        if (id.includes('/locales/fa-IR-')) {
++          source = source.replace(/mermaidToExcalidraw:"[^"]*"/g, 'mermaidToExcalidraw:"تبدیل نمودار به تخته"');
++        }
 +        return source
 +          .replace(
 +            'To move canvas, hold {{shortcut_1}} or {{shortcut_2}} while dragging, or use the hand tool',
@@ -1453,7 +1456,7 @@ index 3827a192..11951cfe 100644
      react(),
      tailwindcss(),
      viteStaticCopy(getStaticFilesToCopy()),
-@@ -93,6 +114,7 @@ function getStaticFilesToCopy(): ViteStaticCopyOptions {
+@@ -93,6 +117,7 @@ function getStaticFilesToCopy(): ViteStaticCopyOptions {
            'assets/audio',
            'assets/backgrounds',
            'assets/imgs',
