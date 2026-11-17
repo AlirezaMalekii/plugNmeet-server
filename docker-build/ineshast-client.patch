@@ -585,15 +585,16 @@ index 04e362a7..44894841 100644
      </div>
    );
 diff --git a/src/components/header/index.tsx b/src/components/header/index.tsx
-index b11083e0..abf44d7f 100644
+index b11083e0..f6b71222 100644
 --- a/src/components/header/index.tsx
 +++ b/src/components/header/index.tsx
-@@ -56,19 +56,7 @@ const Header = () => {
+@@ -56,19 +56,8 @@ const Header = () => {
            aria-label={t('header.aria-label').toString()}
            className={`relative z-99999 px-4 ${APP_LAYOUT_CLASSES.headerHeight} py-1 md:py-0 flex flex-nowrap items-center justify-between bg-white dark:bg-dark-primary transition-transform border-b border-Gray-200 dark:border-Gray-800`}
          >
 -          <div className="left md:relative z-20 flex flex-1 items-center gap-2 md:gap-2.5 lg:gap-5 justify-start">
--            <HeaderLogo />
++          <div className="right flex flex-1 items-center justify-start relative gap-0.5 z-30">
+             <HeaderLogo />
 -            <DarkThemeSwitcher />
 -            <div className="max-md:absolute max-md:top-full max-md:start-3 max-md:mt-1.5 md:relative">
 -              <CountdownTimer />
@@ -605,11 +606,10 @@ index b11083e0..abf44d7f 100644
 -            </h2>
 -          </div>
 -          <div className="right flex flex-1 items-center justify-end relative gap-0.5 z-30 order-3">
-+          <div className="right flex flex-1 items-center justify-start relative gap-0.5 z-30">
              <BackToMainBtn />
              <DurationView />
              <UserNotifications />
-@@ -98,6 +86,18 @@ const Header = () => {
+@@ -98,6 +87,17 @@ const Header = () => {
                )}
              </Menu>
            </div>
@@ -619,7 +619,6 @@ index b11083e0..abf44d7f 100644
 +            </h2>
 +          </div>
 +          <div className="left md:relative z-20 flex flex-1 items-center gap-2 md:gap-2.5 lg:gap-5 justify-end">
-+            <HeaderLogo />
 +            <DarkThemeSwitcher />
 +            <div className="max-md:absolute max-md:top-full max-md:end-3 max-md:mt-1.5 md:relative">
 +              <CountdownTimer />
@@ -739,10 +738,22 @@ index a0db47c9..1a74dd08 100644
            isSendButtonDisabled
              ? 'bg-[#00A1F2]/30 border border-[#08C]/30 cursor-not-allowed'
 diff --git a/src/components/landing/index.tsx b/src/components/landing/index.tsx
-index 0cf97b54..18c2b2fe 100644
+index 0cf97b54..e0e09e1e 100644
 --- a/src/components/landing/index.tsx
 +++ b/src/components/landing/index.tsx
-@@ -182,7 +182,8 @@ const Landing = ({ setIsAppReady, roomConnectionStatus }: StartupJoinModalProps)
+@@ -177,12 +177,20 @@ const Landing = ({ setIsAppReady, roomConnectionStatus }: StartupJoinModalProps)
+         aria-labelledby="startup-modal-title"
+         className={`absolute w-full join-the-audio-popup bg-Gray-100 dark:bg-dark-primary min-h-full flex items-center justify-center p-5 scrollBar`}
+       >
++        <div className="ineshast-entry-art" aria-hidden="true">
++          <span className="ineshast-entry-orbit ineshast-entry-orbit-one" />
++          <span className="ineshast-entry-orbit ineshast-entry-orbit-two" />
++          <span className="ineshast-entry-spark ineshast-entry-spark-one" />
++          <span className="ineshast-entry-spark ineshast-entry-spark-two" />
++          <span className="ineshast-entry-spark ineshast-entry-spark-three" />
++        </div>
+         <div className="inner m-auto bg-Gray-50 dark:bg-dark-primary border border-Gray-300 dark:border-Gray-700 overflow-hidden rounded-2xl w-full max-w-4xl 3xl:max-w-5xl">
+           <div
              id="startup-modal-title"
              className="head bg-white dark:bg-dark-secondary  h-[50px] 3xl:h-[60px] px-3 sm:px-5 flex justify-center sm:justify-start text-center sm:text-start items-center text-Gray-950 dark:text-white text-sm sm:text-base 3xl:text-lg font-medium border-b border-Gray-200 dark:border-Gray-700"
            >
@@ -752,7 +763,7 @@ index 0cf97b54..18c2b2fe 100644
            </div>
            <div className="wrapper bg-Gray-50 dark:bg-dark-secondary  pt-4 sm:pt-8 3xl:pt-11 pb-4 sm:pb-10 3xl:pb-14 px-4 sm:px-8 3xl:px-12 flex flex-wrap">
              <div className="left relative z-20 bg-Gray-25 dark:bg-Gray-800 shadow-box1 border border-Gray-200 dark:border-Gray-700 p-2 w-full md:w-1/2 rounded-2xl mb-5 sm:mb-0">
-@@ -191,7 +192,11 @@ const Landing = ({ setIsAppReady, roomConnectionStatus }: StartupJoinModalProps)
+@@ -191,7 +199,11 @@ const Landing = ({ setIsAppReady, roomConnectionStatus }: StartupJoinModalProps)
                >
                  {hybrid ? (
                    <div className="w-full h-full flex items-center justify-center">
@@ -1163,10 +1174,10 @@ index 5a2cf5b7..fb4c2794 100644
  
 diff --git a/src/styles/ineshast.css b/src/styles/ineshast.css
 new file mode 100644
-index 00000000..361a5791
+index 00000000..85b05ba2
 --- /dev/null
 +++ b/src/styles/ineshast.css
-@@ -0,0 +1,191 @@
+@@ -0,0 +1,215 @@
 +@font-face {
 +  font-family: IranYekan;
 +  src: url('../assets/ineshast/regular.woff') format('woff');
@@ -1358,6 +1369,30 @@ index 00000000..361a5791
 +#main-footer .footer-left .microphone-wrap .tooltip { left: 0 !important; right: auto !important; }
 +#main-footer .footer-right .tooltip { white-space: normal; max-width: min(220px, 80vw); }
 +.search-participants-wrap input::placeholder, #message-textarea::placeholder { text-align: right; direction: rtl; }
++
++/* Keep each tooltip centered on its own control. */
++#main-footer .footer-right .participants .tooltip,
++#main-footer .footer-right .message .tooltip {
++  inset-inline-start: auto; inset-inline-end: auto; left: 50% !important; right: auto !important;
++  transform: translateX(-50%);
++}
++#main-footer .footer-right .participants .tooltip::before,
++#main-footer .footer-right .message .tooltip::before {
++  left: 50%; right: auto; margin: 0; transform: translateX(-50%) rotate(45deg);
++}
++#main-header .right { gap: 0.5rem; min-width: 0; }
++.ineshast-entry-art { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
++.ineshast-entry-orbit { position: absolute; border: 1px solid #8074eb55; border-radius: 50%; box-shadow: inset 0 0 55px #a78bfa19, 0 0 55px #a78bfa22; }
++.ineshast-entry-orbit-one { width: min(54vw, 650px); aspect-ratio: 1; top: -26%; right: -10%; animation: ineshast-orbit-one 13s ease-in-out infinite alternate; }
++.ineshast-entry-orbit-two { width: min(46vw, 540px); aspect-ratio: 1; bottom: -28%; left: -8%; border-width: 2px; animation: ineshast-orbit-two 17s ease-in-out infinite alternate; }
++.ineshast-entry-spark { position: absolute; border-radius: 50%; background: #7464ef; box-shadow: 0 0 18px #8b5cf6, 0 0 42px #a78bfa; animation: ineshast-spark 4s ease-in-out infinite alternate; }
++.ineshast-entry-spark-one { width: 9px; height: 9px; top: 19%; right: 17%; }
++.ineshast-entry-spark-two { width: 7px; height: 7px; bottom: 19%; left: 18%; animation-delay: -1.7s; }
++.ineshast-entry-spark-three { width: 5px; height: 5px; top: 36%; left: 10%; animation-delay: -3s; }
++@keyframes ineshast-orbit-one { from { transform: translate(-4%, 3%) scale(.9); } to { transform: translate(7%, 8%) scale(1.15); } }
++@keyframes ineshast-orbit-two { from { transform: translate(7%, -4%) scale(1.08); } to { transform: translate(-5%, -12%) scale(.9); } }
++@keyframes ineshast-spark { from { opacity: .35; transform: translateY(0) scale(.75); } to { opacity: 1; transform: translateY(-20px) scale(1.3); } }
++@media (prefers-reduced-motion: reduce) { .ineshast-entry-orbit, .ineshast-entry-spark { animation: none; } }
 diff --git a/src/styles/variables.css b/src/styles/variables.css
 index 72a626c8..53a8f560 100644
 --- a/src/styles/variables.css
