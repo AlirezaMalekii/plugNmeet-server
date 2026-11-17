@@ -21,7 +21,7 @@ index 00000000..6ef124da
 +<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="i" x2="1" y2="1"><stop stop-color="#4F46E5"/><stop offset="1" stop-color="#7C3AED"/></linearGradient></defs><rect width="64" height="64" rx="20" fill="url(#i)"/><path d="M17 22a7 7 0 0 1 7-7h16a7 7 0 0 1 7 7v14a7 7 0 0 1-7 7H29l-9 7v-9a7 7 0 0 1-3-5Z" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/><path d="M25 27v6m7-12v18m7-14v10" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle cx="47" cy="17" r="5" fill="#C4B5FD" stroke="#4F46E5" stroke-width="2"/></svg>
 \ No newline at end of file
 diff --git a/src/assets/locales/fa-IR/translation.json b/src/assets/locales/fa-IR/translation.json
-index 3c2d0144..ee6fb2ef 100644
+index 3c2d0144..543fea09 100644
 --- a/src/assets/locales/fa-IR/translation.json
 +++ b/src/assets/locales/fa-IR/translation.json
 @@ -14,7 +14,20 @@
@@ -106,6 +106,15 @@ index 3c2d0144..ee6fb2ef 100644
      }
    },
    "right-panel": {
+@@ -321,7 +360,7 @@
+     "uploading-file": "در حال بارگذاری {{fileName}}",
+     "file-upload-success": "فایل با موفقیت بارگذاری شد",
+     "file-upload-default-error": "در بارگذاری فایل خطایی رخ داد.",
+-    "chat-box-placeholder": "پیام بنویسید، تصویر جای‌گذاری کنید یا فایل را اینجا رها کنید (خط جدید: Shift + Enter)",
++    "chat-box-placeholder": "پیام بنویسید یا تصویر و فایل را اینجا رها کنید",
+     "sending-message": "لطفاً صبر کنید، در حال ارسال...",
+     "reply": "پاسخ بده",
+     "edit-message": "ویرایش پیام",
 @@ -343,7 +382,11 @@
      "scroll-to-bottom": "به پایین صفحه بروید",
      "sync-chat": "همگام سازی چت با همتایان",
@@ -392,6 +401,53 @@ index ffaa2df5..e25d66db 100644
          aria-live="polite"
        >
          {windowStart > 0 && (
+diff --git a/src/components/extra-pages/Loading.tsx b/src/components/extra-pages/Loading.tsx
+index 383dce7f..70a1c038 100644
+--- a/src/components/extra-pages/Loading.tsx
++++ b/src/components/extra-pages/Loading.tsx
+@@ -1,33 +1,17 @@
+ import React from 'react';
+-
+-import './style.css';
+ import { LoadingIcon } from '../../assets/Icons/Loading';
++import useLogo from '../../helpers/hooks/useLogo';
++
++interface ILoadingProps { text: string; }
+ 
+-interface ILoadingProps {
+-  text: string;
+-}
+ const Loading = ({ text }: ILoadingProps) => {
++  const logo = useLogo();
+   return (
+-    <div
+-      role="status"
+-      aria-live="polite"
+-      aria-busy="true"
+-      className={`loader opacity-100 fixed top-0 start-0 w-full h-full bg-Gray-100 dark:bg-dark-primary z-999 flex flex-wrap items-center justify-center`}
+-    >
+-      <div
+-        className="overlay absolute w-full h-full top-0 start-0 bg-center dark:opacity-10"
+-        style={{
+-          backgroundImage: `url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100%25" height="100%25"%3E%3Cpattern id="bg" patternUnits="userSpaceOnUse" width="20" height="20"%3E%3Cg opacity="0.7"%3E%3Crect x="10" y="10" width="4" height="4" rx="2" fill="%23C2DAF2" /%3E%3C/g%3E%3C/pattern%3E%3Crect width="100%25" height="100%25" fill="url(%23bg)" /%3E%3C/svg%3E')`,
+-        }}
+-      ></div>
+-      <div className="inner relative z-20">
+-        <div className="py-2.5 px-5 me-2 text-sm font-medium text-gray-900 dark:text-white inline-flex items-center capitalize">
+-          <LoadingIcon
+-            className={'inline w-10 h-10 me-3 text-Gray-200 animate-spin'}
+-            fillColor={'#004D90'}
+-          />
+-          {text !== '' ? text : 'loading...'}
+-        </div>
++    <div role="status" aria-live="polite" aria-busy="true" className="ineshast-loading">
++      <div className="ineshast-loading-card">
++        <img src={logo} alt="آی‌نشست" />
++        <LoadingIcon className="ineshast-loading-spinner" fillColor="#6757e8" />
++        <p>{text && !text.startsWith('app.') ? text : 'در حال آماده‌سازی جلسه...'}</p>
+       </div>
+     </div>
+   );
 diff --git a/src/components/footer/icons/mic-menu/index.tsx b/src/components/footer/icons/mic-menu/index.tsx
 index 9f62ea87..bdb08b8b 100644
 --- a/src/components/footer/icons/mic-menu/index.tsx
@@ -432,7 +488,7 @@ index e9b88d9e..b96a5b97 100644
                className={`footer-icon-bg w-[20px] md:w-[25px] 3xl:w-[30px] h-[34px] md:h-9 3xl:h-11 flex items-center justify-center border-e-0 border overflow-hidden bg-Gray-50 dark:bg-transparent rounded-e-xl 3xl:rounded-e-2xl disabled:cursor-not-allowed disabled:opacity-50 focus-ring ${open ? 'border-Gray-100 dark:border-Gray-700 dark:bg-Gray-800!' : 'border-Gray-300 dark:border-Gray-700 dark:border-s-Gray-800'}`}
              >
 diff --git a/src/components/footer/index.tsx b/src/components/footer/index.tsx
-index f9f0756d..c7f65e15 100644
+index f9f0756d..b70d60f4 100644
 --- a/src/components/footer/index.tsx
 +++ b/src/components/footer/index.tsx
 @@ -45,9 +45,11 @@ const Footer = () => {
@@ -443,10 +499,10 @@ index f9f0756d..c7f65e15 100644
 -          <MicrophoneIcon />
 -          <WebcamIcon />
 +        <div className="footer-right w-[155px] lg:w-72 hidden md:flex items-center justify-start gap-2">
-+          <ParticipantIcon />
-+          {allowChat && <ChatIcon />}
-+          <div className="line h-6 w-px bg-Gray-200 dark:bg-Gray-700"></div>
 +          <EndMeetingButton />
++          <div className="line h-6 w-px bg-Gray-200 dark:bg-Gray-700"></div>
++          {allowChat && <ChatIcon />}
++          <ParticipantIcon />
          </div>
  
          <div className="footer-middle flex items-center gap-1 3xl:gap-2">
@@ -904,6 +960,28 @@ index e6a07315..dd71c6a4 100644
                    >
                      <i className="icon pnm-pip text-[14px] text-white" />
                    </button>
+diff --git a/src/components/participants/index.tsx b/src/components/participants/index.tsx
+index aeac9613..5978643b 100644
+--- a/src/components/participants/index.tsx
++++ b/src/components/participants/index.tsx
+@@ -135,7 +135,7 @@ const ParticipantsComponent = () => {
+         </div>
+         <div className="search-participants-wrap h-[55px] flex items-center px-3 3xl:px-5 border-y border-Gray-200 dark:border-Gray-800">
+           <div className="w-full relative">
+-            <div className="search-icon text-Gray-600 dark:text-white absolute top-1/2 -translate-y-1/2 start-3 3xl:start-4 pointer-events-none">
++            <div className="search-icon text-Gray-600 dark:text-white absolute top-1/2 -translate-y-1/2 end-3 3xl:end-4 pointer-events-none">
+               <SearchIconSVG />
+             </div>
+             <input
+@@ -144,7 +144,7 @@ const ParticipantsComponent = () => {
+               name="search-participants"
+               id="search-participants"
+               placeholder={t('left-panel.search-participant')}
+-              className="text-Gray-950 dark:text-white placeholder:text-Gray-600 dark:placeholder:text-white h-9 rounded-lg 3xl:rounded-[15px] bg-white dark:bg-dark-primary border border-Gray-200 dark:border-Gray-800 w-full ps-8 3xl:ps-10 outline-hidden focus-ring text-xs 3xl:text-sm"
++              className="text-Gray-950 dark:text-white placeholder:text-Gray-600 dark:placeholder:text-white h-9 rounded-lg 3xl:rounded-[15px] bg-white dark:bg-dark-primary border border-Gray-200 dark:border-Gray-800 w-full pe-8 3xl:pe-10 text-right outline-hidden focus-ring text-xs 3xl:text-sm"
+               onChange={(e) => setSearchParticipant(e.target.value)}
+             />
+           </div>
 diff --git a/src/components/polls/pollsList.tsx b/src/components/polls/pollsList.tsx
 index 748500dd..719c1e5b 100644
 --- a/src/components/polls/pollsList.tsx
@@ -946,10 +1024,10 @@ index b7167d10..32b1a439 100644
    useEffect(() => {
      const customLogo = getConfigValue<string | CustomLogo>('customLogo', '', 'CUSTOM_LOGO');
 diff --git a/src/helpers/i18n.ts b/src/helpers/i18n.ts
-index 855c613b..82d77c20 100644
+index 855c613b..888a24dc 100644
 --- a/src/helpers/i18n.ts
 +++ b/src/helpers/i18n.ts
-@@ -1,25 +1,19 @@
+@@ -1,30 +1,24 @@
  import i18n from 'i18next';
  import { initReactI18next } from 'react-i18next';
 -import LanguageDetector from 'i18next-browser-languagedetector';
@@ -978,6 +1056,12 @@ index 855c613b..82d77c20 100644
      interpolation: {
        escapeValue: false, // not needed for react as it escapes by default
      },
+     backend: {
+-      loadPath: assetPath + '/locales/{{lng}}/{{ns}}.json',
++      loadPath: assetPath + '/locales/{{lng}}/{{ns}}.json?v=ineshast-20261117-2',
+     },
+   });
+ 
 diff --git a/src/helpers/nats/HandleParticipants.ts b/src/helpers/nats/HandleParticipants.ts
 index e8debe2d..ac68e1ca 100644
 --- a/src/helpers/nats/HandleParticipants.ts
@@ -1079,10 +1163,10 @@ index 5a2cf5b7..fb4c2794 100644
  
 diff --git a/src/styles/ineshast.css b/src/styles/ineshast.css
 new file mode 100644
-index 00000000..6be4c528
+index 00000000..361a5791
 --- /dev/null
 +++ b/src/styles/ineshast.css
-@@ -0,0 +1,154 @@
+@@ -0,0 +1,191 @@
 +@font-face {
 +  font-family: IranYekan;
 +  src: url('../assets/ineshast/regular.woff') format('woff');
@@ -1237,6 +1321,43 @@ index 00000000..6be4c528
 +  font-size: 11px;
 +  font-weight: 700;
 +}
++
++#message-textarea { direction: rtl; text-align: right; }
++#main-footer .footer-right .tooltip { inset-inline-start: 0; inset-inline-end: auto; text-align: center; }
++#main-footer .footer-left .tooltip { inset-inline-end: 0; inset-inline-start: auto; }
++#main-footer .micro-muted-tooltip { inset-inline-start: auto !important; inset-inline-end: 0 !important; max-width: min(300px, 90vw); }
++.ineshast-camera-strip .video-camera-item-inner { overflow: hidden; border-radius: 12px; }
++
++.ineshast-loading {
++  position: fixed; inset: 0; z-index: 999; display: grid; place-items: center;
++  overflow: hidden; isolation: isolate; background: #f7f8fd; color: #18213a;
++}
++body.dark .ineshast-loading { background: #0d1020; color: #f5f4ff; }
++.ineshast-loading::before, #startupJoinModal::after {
++  content: ''; position: fixed; inset: -25%; z-index: -1; pointer-events: none;
++  background: radial-gradient(ellipse at 22% 28%, #a78bfa80, transparent 34%),
++    radial-gradient(ellipse at 76% 68%, #6366f166, transparent 34%),
++    radial-gradient(ellipse at 53% 50%, #e0e7ff99, transparent 46%);
++  animation: ineshast-aurora 16s ease-in-out infinite alternate;
++}
++body.dark .ineshast-loading::before, body.dark #startupJoinModal::after {
++  background: radial-gradient(ellipse at 22% 28%, #6d28d950, transparent 34%),
++    radial-gradient(ellipse at 76% 68%, #4338ca60, transparent 34%),
++    radial-gradient(ellipse at 53% 50%, #1e1b4b88, transparent 46%);
++}
++.ineshast-loading-card { display: flex; flex-direction: column; align-items: center; gap: 22px; padding: 38px 52px; border-radius: 26px; background: #ffffffc9; box-shadow: 0 24px 80px #312e8130; backdrop-filter: blur(18px); }
++body.dark .ineshast-loading-card { background: #171b32d9; }
++.ineshast-loading-card img { width: 155px; height: auto; }
++.ineshast-loading-card p { margin: 0; font-size: 14px; }
++.ineshast-loading-spinner { width: 32px; height: 32px; animation: spin 1s linear infinite; }
++#startupJoinModal::after { opacity: .7; animation-direction: alternate-reverse; }
++@media (prefers-reduced-motion: reduce) { .ineshast-loading::before, #startupJoinModal::after { animation: none; } }
++.ineshast-camera-strip .video-camera-item-inner > .name { bottom: 4px; padding: 3px 8px; font-size: 11px; line-height: 1.4; max-height: 38%; overflow: hidden; background: linear-gradient(transparent, #000a); }
++#main-footer .micro-muted-tooltip .inner { width: min(300px, 86vw); white-space: normal; }
++
++#main-footer .footer-left .microphone-wrap .tooltip { left: 0 !important; right: auto !important; }
++#main-footer .footer-right .tooltip { white-space: normal; max-width: min(220px, 80vw); }
++.search-participants-wrap input::placeholder, #message-textarea::placeholder { text-align: right; direction: rtl; }
 diff --git a/src/styles/variables.css b/src/styles/variables.css
 index 72a626c8..53a8f560 100644
 --- a/src/styles/variables.css
@@ -1301,10 +1422,10 @@ index 72a626c8..53a8f560 100644
  
    --radius-tlbl-d: 0 0 20px 20px;
 diff --git a/vite.config.ts b/vite.config.ts
-index 3827a192..66c51113 100644
+index 3827a192..23002d69 100644
 --- a/vite.config.ts
 +++ b/vite.config.ts
-@@ -47,6 +47,18 @@ export default defineConfig({
+@@ -47,6 +47,24 @@ export default defineConfig({
      },
    },
    plugins: [
@@ -1317,13 +1438,19 @@ index 3827a192..66c51113 100644
 +            'To move canvas, hold {{shortcut_1}} or {{shortcut_2}} while dragging, or use the hand tool',
 +            'برای جابه‌جایی تخته، {{shortcut_1}} یا {{shortcut_2}} را نگه دارید و بکشید، یا از ابزار دست استفاده کنید',
 +          )
-+          .replace(/"Scroll wheel"/g, '"چرخ ماوس"');
++          .replace(/"Scroll wheel"/g, '"چرخ ماوس"')
++          .replace(/"Draw to shape"/g, '"ترسیم شکل"')
++          .replace(/"Bucket fill"/g, '"رنگ‌آمیزی"')
++          .replace(/"Sticky note"/g, '"یادداشت چسبان"')
++          .replace(/"Web Embed"/g, '"افزونهٔ وب"')
++          .replace(/"Generate"/g, '"ساختن"')
++          .replace(/"Mermaid to Excalidraw"/g, '"تبدیل نمودار به تخته"');
 +      },
 +    },
      react(),
      tailwindcss(),
      viteStaticCopy(getStaticFilesToCopy()),
-@@ -93,6 +105,7 @@ function getStaticFilesToCopy(): ViteStaticCopyOptions {
+@@ -93,6 +111,7 @@ function getStaticFilesToCopy(): ViteStaticCopyOptions {
            'assets/audio',
            'assets/backgrounds',
            'assets/imgs',
