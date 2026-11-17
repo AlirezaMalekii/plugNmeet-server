@@ -2,6 +2,10 @@ FROM node:24-bookworm AS webclient
 WORKDIR /webclient
 RUN corepack enable
 COPY components/client/ ./
+COPY docker-build/ineshast-client.patch /tmp/ineshast-client.patch
+RUN git apply /tmp/ineshast-client.patch
+ADD --checksum=sha256:73b8df6612290d20e2926c5b109e3f26e3f01d65f5f78263f3d0d6401919e31e https://api.ineshast.ir/email/fonts/iranyekanregular.woff /webclient/src/assets/ineshast/regular.woff
+ADD --checksum=sha256:cb8bc2ad8b60d6a747f51c6896f63f4e114f51844e9c107b9a4032ebe513ae1c https://api.ineshast.ir/email/fonts/iranyekanbold.woff /webclient/src/assets/ineshast/bold.woff
 RUN pnpm install --frozen-lockfile && pnpm run build
 RUN sed "s|http://localhost:8080|https://meet.ineshast.ir|g" dist/assets/config_sample.js > dist/assets/config.js
 
