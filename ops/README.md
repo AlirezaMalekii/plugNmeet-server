@@ -43,3 +43,5 @@ Default-provider activation requires two-room/ten-user/two-recorder tests, force
 ## LiveKit version
 
 Final deployment targets LiveKit v1.13.11, whose TURN configuration supports proxy_protocol and trusted proxy CIDRs. HAProxy sends PROXYv2 to preserve the real TURN client address. The initial API smoke used v1.9.11 with these newer options disabled. Upgrade and repeat forced-TURN/media acceptance before final use. Upstream source evidence is https://github.com/livekit/livekit/blob/v1.13.11/pkg/config/config.go#L325-L337.
+
+برای آرشیو فایل‌های چت عمومی و ارائه، ابتدا Core و تصویر کامل سرور و کلاینت پلاگین‌میت را با هم منتشر کنید. متغیر `INESHAST_SHARED_FILES_URL` در Compose به مسیر HTTPS دریافت فایل در Core اشاره می‌کند و باید همان راز API موجود را در هر دو سرویس داشته باشد. در محیط آزمایشی با `PLUGNMEET_SHARED_FILES_ENABLED=true` یک اتاق جدید ایجاد و ارسال فایل، دانلود، و نمایش آن در پنل را بررسی کنید. همین تنظیم را پس از تأیید آزمایش در Core محیط اصلی فعال کنید. این تنظیم در اتاق‌های جدید اعمال می‌شود. آرشیو به دیسک خصوصی محلی Core وابسته است و استخراج PDF متنی به `pdftotext` نیاز دارد که تصویر Docker Core آن را نصب می‌کند.

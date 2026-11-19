@@ -41,7 +41,7 @@ index 00000000..6ef124da
 +<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="i" x2="1" y2="1"><stop stop-color="#4F46E5"/><stop offset="1" stop-color="#7C3AED"/></linearGradient></defs><rect width="64" height="64" rx="20" fill="url(#i)"/><path d="M17 22a7 7 0 0 1 7-7h16a7 7 0 0 1 7 7v14a7 7 0 0 1-7 7H29l-9 7v-9a7 7 0 0 1-3-5Z" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/><path d="M25 27v6m7-12v18m7-14v10" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/><circle cx="47" cy="17" r="5" fill="#C4B5FD" stroke="#4F46E5" stroke-width="2"/></svg>
 \ No newline at end of file
 diff --git a/src/assets/locales/fa-IR/translation.json b/src/assets/locales/fa-IR/translation.json
-index 3c2d0144..543fea09 100644
+index 3c2d014..4149a6d 100644
 --- a/src/assets/locales/fa-IR/translation.json
 +++ b/src/assets/locales/fa-IR/translation.json
 @@ -14,7 +14,20 @@
@@ -104,7 +104,7 @@ index 3c2d0144..543fea09 100644
    },
    "left-panel": {
      "participants": "شرکت‌کنندگان ({{total}})",
-@@ -314,6 +338,21 @@
+@@ -314,14 +338,31 @@
          "want-to-block": "آیا می‌خواهید این کاربر را مسدود کنید؟",
          "user-approved": "شما پیوستن {{name}} را تأیید کردید."
        }
@@ -126,8 +126,10 @@ index 3c2d0144..543fea09 100644
      }
    },
    "right-panel": {
-@@ -321,7 +360,7 @@
+     "you": "شما",
      "uploading-file": "در حال بارگذاری {{fileName}}",
++    "attach-files": "پیوست فایل",
++    "file-download-error": "دانلود فایل ممکن نشد.",
      "file-upload-success": "فایل با موفقیت بارگذاری شد",
      "file-upload-default-error": "در بارگذاری فایل خطایی رخ داد.",
 -    "chat-box-placeholder": "پیام بنویسید، تصویر جای‌گذاری کنید یا فایل را اینجا رها کنید (خط جدید: Shift + Enter)",
@@ -135,7 +137,7 @@ index 3c2d0144..543fea09 100644
      "sending-message": "لطفاً صبر کنید، در حال ارسال...",
      "reply": "پاسخ بده",
      "edit-message": "ویرایش پیام",
-@@ -343,7 +382,11 @@
+@@ -343,7 +384,11 @@
      "scroll-to-bottom": "به پایین صفحه بروید",
      "sync-chat": "همگام سازی چت با همتایان",
      "load-earlier-messages": "بارگذاری پیام های قبلی",
@@ -148,7 +150,15 @@ index 3c2d0144..543fea09 100644
    },
    "footer": {
      "aria-label": "کنترل‌های جلسه",
-@@ -418,7 +461,9 @@
+@@ -371,6 +416,7 @@
+       "lower-hand": "پایین آوردن دست",
+       "raise-hand": "بالا بردن دست",
+       "reactions": "واکنش‌ها",
++      "recording-active": "در حال ضبط",
+       "stop-recording": "توقف ضبط",
+       "start-recording": "شروع ضبط",
+       "how-to-record": "چگونه می‌خواهید ضبط کنید؟",
+@@ -418,7 +464,9 @@
        "speech-to-text-settings": "رونویسی و ترجمه",
        "ai-settings": "ابزارهای هوش مصنوعی",
        "enable-polls": "فعال کردن نظرسنجی‌ها",
@@ -159,7 +169,7 @@ index 3c2d0144..543fea09 100644
      },
      "notice": {
        "already-active-screen-sharing": "شخص دیگری در حال اشتراک‌گذاری صفحه است.",
-@@ -439,7 +484,7 @@
+@@ -439,7 +487,7 @@
        "rtmp-url-invalid": "آدرس RTMP معتبر نیست یا پشتیبانی نمی‌شود.",
        "whip-url-invalid": "آدرس WHIP معتبر یا پشتیبانی شده نیست.",
        "rtmp-stream-key-required": "کلید پخش لازم است.",
@@ -168,7 +178,7 @@ index 3c2d0144..543fea09 100644
        "external-media-player-starting": "در حال آماده‌سازی ویدیو برای پخش، لطفاً صبر کنید.",
        "screenshare-error": "اشتراک‌گذاری صفحه شروع نشد."
      },
-@@ -507,8 +552,8 @@
+@@ -507,8 +555,8 @@
        "webcam-resolution": {
          "h2160": "4K (2160p)",
          "h1440": "۱۴۴۰p",
@@ -179,7 +189,7 @@ index 3c2d0144..543fea09 100644
          "h540": "۵۴۰p",
          "h360": "۳۶۰p",
          "h216": "۲۱۶ صفحه",
-@@ -584,7 +629,7 @@
+@@ -584,7 +632,7 @@
      "export-pdf-no-pages-to-export": "هیچ صفحه‌ای با محتوا برای خروجی وجود ندارد.",
      "export-pdf-no-pages-with-content": "هیچ صفحه‌ای با محتوا برای خروجی پیدا نشد.",
      "export-pdf-progress-warning": "یک خروجی در حال انجام است.",
@@ -188,7 +198,7 @@ index 3c2d0144..543fea09 100644
      "export-pdf-starting": "در حال شروع خروجی PDF...",
      "export-pdf-gathering-page": "در حال جمع‌آوری صفحه {{page}} ({{current}}/{{total}})...",
      "export-pdf-creating-image": "در حال ساخت تصویر برای صفحه {{page}}...",
-@@ -603,7 +648,9 @@
+@@ -603,7 +651,9 @@
      "export-pdf-exporting": "در حال خروجی گرفتن...",
      "share-download-link": "اشتراک‌گذاری پیوند دانلود در گفتگوی عمومی",
      "download-link-sent": "پیوند دانلود به گفتگوی عمومی ارسال شد",
@@ -199,7 +209,7 @@ index 3c2d0144..543fea09 100644
    },
    "waiting-room": {
      "modal-title": "مدیریت اتاق انتظار",
-@@ -679,7 +726,8 @@
+@@ -679,7 +729,8 @@
        "end-poll-success": "نظرسنجی به پایان رسیده است.",
        "reopen-poll-success": "نظرسنجی دوباره بازگشایی شده است.",
        "ai-generated": "آماده پیش نویس هوش مصنوعی — بازبینی و ایجاد.",
@@ -209,7 +219,7 @@ index 3c2d0144..543fea09 100644
      },
      "errors": {
        "generic": "یه مشکلی پیش اومده. لطفا دوباره تلاش کن.",
-@@ -701,8 +749,17 @@
+@@ -701,8 +752,17 @@
        "user-and-poll-id-required": "هر دو شناسه کاربری و شناسه نظرسنجی الزامی هستند.",
        "ai-disabled": "تولید نظرسنجی با هوش مصنوعی غیرفعال است.",
        "ai-invalid-response": "پاسخ هوش مصنوعی قابل استفاده نبود. لطفا دوباره تلاش کنید.",
@@ -229,7 +239,7 @@ index 3c2d0144..543fea09 100644
    },
    "breakout-room": {
      "share-polls": "نظرسنجی ها را با اتاق های فرعی به اشتراک بگذارید",
-@@ -836,8 +893,8 @@
+@@ -836,8 +896,8 @@
    },
    "ingress-features": {
      "ingress-type": "نوع ورودی",
@@ -240,7 +250,7 @@ index 3c2d0144..543fea09 100644
      "join-as-name": "نام نمایشی",
      "feature-not-allow": "این قابلیت برای این اتاق فعال نیست.",
      "join-as-name-required": "نام نمایشی لازم است.",
-@@ -976,5 +1033,154 @@
+@@ -976,5 +1036,154 @@
      "enable-auto-close-chat-panel": "فعال کردن بستن خودکار پنل گفتگو",
      "duration-after-last-message": "مدت زمان پس از آخرین پیام (به دقیقه)",
      "duration-after-last-message-help": "پنل گفتگو پس از این مدت عدم فعالیت به‌طور خودکار بسته می‌شود."
@@ -482,14 +492,62 @@ index 9f62ea87..bdb08b8b 100644
                className={`footer-icon-bg w-[20px] md:w-[25px] 3xl:w-[30px] h-[34px] md:h-9 3xl:h-11 flex items-center justify-center border-e-0 border overflow-hidden cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-ring ${isMicMuted && isActiveMicrophone ? 'border-Red-100! 3xl:border-Red-200! dark:border-transparent! bg-Red-100! text-black' : ''} ${isActiveMicrophone ? 'bg-Gray-50 dark:bg-transparent rounded-e-xl 3xl:rounded-e-2xl' : 'border-Gray-300'} ${open ? 'border-Gray-100 dark:border-Gray-700 dark:bg-Gray-800!' : 'border-Gray-300 dark:border-Gray-700 dark:border-s-Gray-800'}`}
              >
 diff --git a/src/components/footer/icons/recording.tsx b/src/components/footer/icons/recording.tsx
-index cacd7ebd..1b85ec6a 100644
+index cacd7eb..a7cb9b6 100644
 --- a/src/components/footer/icons/recording.tsx
 +++ b/src/components/footer/icons/recording.tsx
-@@ -264,7 +264,7 @@ const RecordingIcon = () => {
+@@ -228,14 +228,26 @@ const RecordingIcon = () => {
+   }, [isRunningCloudRecording]);
+
+   if (!isAllowRecording || !isAdmin) {
+-    return null;
++    return isRunningCloudRecording ? (
++      <span
++        role="status"
++        title={t('footer.icons.recording-active')}
++        className="inline-flex h-10 items-center gap-1.5 rounded-xl bg-red-700 px-2 text-xs font-semibold whitespace-nowrap text-white"
++      >
++        <span
++          aria-hidden="true"
++          className="size-2 rounded-full bg-white motion-safe:animate-pulse"
++        />
++        {t('footer.icons.recording-active')}
++      </span>
++    ) : null;
+   }
+
+   const buttonClasses = clsx(
+     'recorder-icon relative footer-icon cursor-pointer w-10 md:w-11 3xl:w-[52px] h-10 md:h-11 3xl:h-[52px] rounded-[15px] 3xl:rounded-[18px] border-[3px] 3xl:border-4',
+     {
+       'focus-ring': true,
+-      'record border-Red-400/20 dark:border-Gray-800': isRecording,
++      'border-red-300': isRecording,
+       'border-transparent': !isRecording,
+     },
+   );
+@@ -244,7 +256,7 @@ const RecordingIcon = () => {
+     'footer-icon-bg h-full w-full flex items-center justify-center rounded-[12px] 3xl:rounded-[15px] border border-Gray-300 dark:border-Gray-700 shadow transition-all duration-300 hover:bg-gray-100 dark:hover:bg-Gray-700 text-Gray-950 dark:text-white',
+     {
+       'has-tooltip': showTooltip,
+-      'bg-gray-100 dark:bg-Gray-700': isRecording,
++      '!border-red-600 !bg-red-700 !text-white hover:!bg-red-800': isRecording,
+       'bg-white dark:bg-Gray-800': !isRecording,
+     },
+   );
+@@ -261,10 +273,17 @@ const RecordingIcon = () => {
+         onClick={() => onClickRecordingBtn()}
+         disabled={disable}
+         aria-label={tooltipText.toString()}
++        aria-pressed={isRecording}
        >
          <div className={innerDivClasses}>
            <span className="tooltip">{tooltipText}</span>
 -          <i className="pnm-rec text-[11px] lg:text-[12px] font-['Nunito Sans'] font-bold" />
++          {isRecording && (
++            <span
++              aria-hidden="true"
++              className="absolute end-1 top-1 size-2 rounded-full bg-white motion-safe:animate-pulse"
++            />
++          )}
 +          <span className="ineshast-record-label">ضبط</span>
          </div>
        </button>
@@ -1519,3 +1577,382 @@ index 3827a192..8334154c 100644
            'assets/locales',
            'assets/lti',
            'assets/config_sample.js',
+diff --git a/src/assets/locales/en/translation.json b/src/assets/locales/en/translation.json
+index 47ac05a..e0c6418 100644
+--- a/src/assets/locales/en/translation.json
++++ b/src/assets/locales/en/translation.json
+@@ -346,6 +346,8 @@
+     "you": "You",
+     "uploading-file": "Uploading {{fileName}}",
+     "file-upload-success": "File uploaded successfully",
++    "file-download-error": "The file could not be downloaded.",
++    "attach-files": "Attach files",
+     "file-upload-default-error": "There was an error uploading the file.",
+     "chat-box-placeholder": "Send a message, paste an image, or drop a file here (New line: Shift + Enter)",
+     "message-placeholder": "Type a message",
+@@ -401,6 +403,7 @@
+       "lower-hand": "Lower Hand",
+       "raise-hand": "Raise Hand",
+       "reactions": "Reactions",
++      "recording-active": "Recording",
+       "stop-recording": "Stop Recording",
+       "start-recording": "Start Recording",
+       "how-to-record": "How would you like to record?",
+diff --git a/src/components/chat/index.tsx b/src/components/chat/index.tsx
+index fe12f82..988164f 100644
+--- a/src/components/chat/index.tsx
++++ b/src/components/chat/index.tsx
+@@ -1,4 +1,4 @@
+-import React, { DragEvent, useMemo } from 'react';
++import React, { DragEvent, useEffect, useMemo, useRef } from 'react';
+ import { useTranslation } from 'react-i18next';
+ import { RoomUploadedFileType } from 'plugnmeet-protocol-js';
+
+@@ -6,13 +6,34 @@ import TextBoxArea from './text-box';
+ import ChatTabs from './chatTabs';
+
+ import { store, useAppDispatch, useAppSelector } from '../../store';
+-import { publishFileAttachmentToChat } from './utils';
++import {
++  canAttachToCurrentChat,
++  downloadRoomAttachment,
++  publishFileAttachmentToChat,
++} from './utils';
+ import { addUserNotification } from '../../store/slices/roomSettingsSlice';
+ import { uploadResumableFile } from '../../helpers/fileUpload';
+
+ const ChatComponent = () => {
+   const { t } = useTranslation();
+   const dispatch = useAppDispatch();
++  const chatRef = useRef<HTMLDivElement>(null);
++  useEffect(() => {
++    const chat = chatRef.current;
++    const download = (event: MouseEvent) => {
++      void downloadRoomAttachment(event).catch(() =>
++        dispatch(
++          addUserNotification({
++            message: t('right-panel.file-download-error'),
++            typeOption: 'error',
++          }),
++        ),
++      );
++    };
++    chat?.addEventListener('click', download);
++    return () => chat?.removeEventListener('click', download);
++  }, [dispatch, t]);
++
+   // Values that are static for the session
+   const { isRecorder, isAdmin, chatFeatures } = useMemo(() => {
+     const session = store.getState().session;
+@@ -68,11 +89,17 @@ const ChatComponent = () => {
+   const handleOnDrop = (e: DragEvent) => {
+     e.preventDefault();
+
+-    if (isLockChatSendMessage || isLockChatFileShare) {
++    if (
++      !canShowChatInput ||
++      !chatFeatures?.isAllowFileUpload ||
++      !canAttachToCurrentChat() ||
++      (!isAdmin && (isLockChatFileShare ?? defaultLockSettings?.lockChatFileShare))
++    ) {
+       return;
+     }
+
+     if (e.dataTransfer && e.dataTransfer.files) {
++      const target = store.getState().roomSettings.selectedChatOption;
+       const files = Array.from(e.dataTransfer.files);
+       if (files.length) {
+         uploadResumableFile(
+@@ -81,7 +108,7 @@ const ChatComponent = () => {
+           RoomUploadedFileType.CHAT_FILE,
+           files,
+           (result) => {
+-            publishFileAttachmentToChat(result.filePath, result.fileName).then(() =>
++            publishFileAttachmentToChat(result.filePath, result.fileName, target).then(() =>
+               dispatch(
+                 addUserNotification({
+                   message: t('right-panel.file-upload-success'),
+@@ -97,6 +124,7 @@ const ChatComponent = () => {
+
+   return (
+     <div
++      ref={chatRef}
+       className="side-panel-bg-color z-10 w-full bg-Gray-25 dark:bg-dark-primary border-l border-Gray-200 dark:border-Gray-800 h-full flex flex-col"
+       onDrop={handleOnDrop}
+       onDragOver={(e) => e.preventDefault()}
+diff --git a/src/components/chat/text-box/fileSend.tsx b/src/components/chat/text-box/fileSend.tsx
+index 53c4a05..dfa88db 100644
+--- a/src/components/chat/text-box/fileSend.tsx
++++ b/src/components/chat/text-box/fileSend.tsx
+@@ -1,10 +1,10 @@
+-import React, { useEffect, useMemo, useRef, useState } from 'react';
++import React, { useMemo, useRef, useState } from 'react';
+ import { useTranslation } from 'react-i18next';
+ import { ChatFeatures, RoomUploadedFileType } from 'plugnmeet-protocol-js';
+
+-import { useAppDispatch } from '../../../store';
+-import useResumableFilesUpload from '../../../helpers/hooks/useResumableFilesUpload';
+-import { publishFileAttachmentToChat } from '../utils';
++import { store, useAppDispatch } from '../../../store';
++import { uploadResumableFile } from '../../../helpers/fileUpload';
++import { canAttachToCurrentChat, publishFileAttachmentToChat } from '../utils';
+ import { addUserNotification } from '../../../store/slices/roomSettingsSlice';
+ import { LoadingIcon } from '../../../assets/Icons/Loading';
+
+@@ -17,7 +17,7 @@ const FileSend = ({ lockSendFile, chatFeatures }: IFileSendProps) => {
+   const inputFile = useRef<HTMLInputElement>(null);
+   const { t } = useTranslation();
+   const dispatch = useAppDispatch();
+-  const [files, setFiles] = useState<Array<File>>();
++  const [isUploading, setIsUploading] = useState(false);
+
+   const { accept, maxFileSize, canUpload } = useMemo(() => {
+     const allowedTypes = chatFeatures?.allowedFileTypes;
+@@ -26,38 +26,59 @@ const FileSend = ({ lockSendFile, chatFeatures }: IFileSendProps) => {
+     return { accept, maxFileSize: chatFeatures?.maxFileSize, canUpload };
+   }, [chatFeatures?.allowedFileTypes, chatFeatures?.maxFileSize]);
+
+-  const { isUploading, result } = useResumableFilesUpload({
+-    allowedFileTypes: chatFeatures?.allowedFileTypes ?? [],
+-    maxFileSize,
+-    files,
+-    fileType: RoomUploadedFileType.CHAT_FILE,
+-  });
+-
+-  useEffect(() => {
+-    if (result && result.filePath && result.fileName) {
+-      publishFileAttachmentToChat(result.filePath, result.fileName).then();
+-      dispatch(
+-        addUserNotification({
+-          message: t('right-panel.file-upload-success'),
+-          typeOption: 'success',
+-        }),
+-      );
+-    }
+-    //eslint-disable-next-line
+-  }, [result]);
+-
+   const openFileBrowser = () => {
+     if (!isUploading) {
+       inputFile.current?.click();
+     }
+   };
+
+-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
++  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+     const files = e.target.files;
+-    if (!files || !files.length) {
++    if (!files || !files.length || lockSendFile || !canAttachToCurrentChat()) {
+       return;
+     }
+-    setFiles([...files]);
++    const selected = Array.from(files);
++    const target = store.getState().roomSettings.selectedChatOption;
++    e.target.value = '';
++    setIsUploading(true);
++    try {
++      for (const file of selected) {
++        await new Promise<void>((resolve) => {
++          uploadResumableFile(
++            chatFeatures?.allowedFileTypes ?? [],
++            maxFileSize,
++            RoomUploadedFileType.CHAT_FILE,
++            [file],
++            (result) => {
++              void publishFileAttachmentToChat(result.filePath, result.fileName, target)
++                .then(() =>
++                  dispatch(
++                    addUserNotification({
++                      message: t('right-panel.file-upload-success'),
++                      typeOption: 'success',
++                    }),
++                  ),
++                )
++                .catch((error) => {
++                  console.error(error);
++                  dispatch(
++                    addUserNotification({
++                      message: t('right-panel.file-upload-default-error'),
++                      typeOption: 'error',
++                    }),
++                  );
++                })
++                .finally(resolve);
++            },
++            undefined,
++            undefined,
++            () => resolve(),
++          );
++        });
++      }
++    } finally {
++      setIsUploading(false);
++    }
+   };
+
+   return (
+@@ -67,13 +88,17 @@ const FileSend = ({ lockSendFile, chatFeatures }: IFileSendProps) => {
+         id="chat-file"
+         ref={inputFile}
+         accept={accept}
++        multiple
+         style={{ display: 'none' }}
+         onChange={(e) => onChange(e)}
+       />
+       <button
++        type="button"
++        aria-label={t('right-panel.attach-files').toString()}
++        title={t('right-panel.attach-files').toString()}
+         disabled={lockSendFile || isUploading || !canUpload}
+         onClick={() => openFileBrowser()}
+-        className=""
++        className="w-full h-full rounded-full flex items-center justify-center hover:bg-Gray-100 dark:hover:bg-Gray-700 focus-ring disabled:opacity-50 disabled:cursor-not-allowed"
+       >
+         {isUploading ? (
+           <LoadingIcon
+diff --git a/src/components/chat/text-box/index.tsx b/src/components/chat/text-box/index.tsx
+index 37e0836..72f07ca 100644
+--- a/src/components/chat/text-box/index.tsx
++++ b/src/components/chat/text-box/index.tsx
+@@ -15,7 +15,12 @@ import { store, useAppDispatch, useAppSelector } from '../../../store';
+ import FileSend from './fileSend';
+ import { getNatsConn } from '../../../helpers/nats';
+ import { useAutosizeTextArea } from './useAutosizeTextArea';
+-import { getPlainTextSnippet, htmlToEditableText, publishFileAttachmentToChat } from '../utils';
++import {
++  canAttachToCurrentChat,
++  getPlainTextSnippet,
++  htmlToEditableText,
++  publishFileAttachmentToChat,
++} from '../utils';
+ import { renderMarkdown } from '../../insights-ai/ai-text-chat/helpers/renderMarkdown';
+ import { uploadResumableFile } from '../../../helpers/fileUpload';
+ import { addUserNotification } from '../../../store/slices/roomSettingsSlice';
+@@ -212,7 +217,7 @@ const TextBoxArea = () => {
+
+   const handleOnPaste = useCallback(
+     (e: ClipboardEvent) => {
+-      if (isFileSendingLocked || isMsgSendingLocked) {
++      if (!showSendFile || !canAttachToCurrentChat() || isFileSendingLocked || isMsgSendingLocked) {
+         return;
+       }
+
+@@ -243,7 +248,11 @@ const TextBoxArea = () => {
+             RoomUploadedFileType.CHAT_FILE,
+             files,
+             (result) => {
+-              publishFileAttachmentToChat(result.filePath, result.fileName).then(() =>
++              publishFileAttachmentToChat(
++                result.filePath,
++                result.fileName,
++                selectedChatOption,
++              ).then(() =>
+                 dispatch(
+                   addUserNotification({
+                     message: t('right-panel.file-upload-success'),
+@@ -256,7 +265,15 @@ const TextBoxArea = () => {
+         }
+       }
+     },
+-    [isFileSendingLocked, isMsgSendingLocked, chatFeatures, dispatch, t],
++    [
++      showSendFile,
++      isFileSendingLocked,
++      isMsgSendingLocked,
++      selectedChatOption,
++      chatFeatures,
++      dispatch,
++      t,
++    ],
+   );
+
+   const placeholderText = isSendingMsg
+@@ -306,9 +323,6 @@ const TextBoxArea = () => {
+         </div>
+       )}
+       <div className="flex items-center justify-between border border-Gray-200 dark:border-Gray-700 rounded-2xl 3xl:rounded-3xl p-1.5 w-full">
+-        {showSendFile && (
+-          <FileSend lockSendFile={isFileSendingLocked} chatFeatures={chatFeatures} />
+-        )}
+         <textarea
+           dir="auto"
+           name="message-textarea"
+@@ -323,6 +337,12 @@ const TextBoxArea = () => {
+           rows={1}
+           onPaste={handleOnPaste}
+         />
++        {showSendFile && canAttachToCurrentChat() && (
++          <FileSend
++            lockSendFile={isFileSendingLocked || isMsgSendingLocked}
++            chatFeatures={chatFeatures}
++          />
++        )}
+         <button
+           disabled={isMsgSendingLocked || isSendingMsg}
+           onClick={sendMsg}
+diff --git a/src/components/chat/utils.ts b/src/components/chat/utils.ts
+index 674fe3c..87d323e 100644
+--- a/src/components/chat/utils.ts
++++ b/src/components/chat/utils.ts
+@@ -191,17 +191,24 @@ const serverUrl = getConfigValue<string>(
+   'PLUG_N_MEET_SERVER_URL',
+ );
+
+-export const publishFileAttachmentToChat = async (filePath: string, fileName: string) => {
++export const publishFileAttachmentToChat = async (
++  filePath: string,
++  fileName: string,
++  target?: string,
++) => {
++  const archiveFile = filePath.split('/').pop()?.startsWith('ineshast-chat-');
++  const downloadPath = archiveFile ? '/api/downloadRoomFile/' : '/download/uploadedFile/';
++  const safeName = fileName.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+   const message = `<a class="attachment-message flex items-center gap-3 break-all" href="${
+-    serverUrl + '/download/uploadedFile/' + window.encodeURIComponent(filePath)
++    serverUrl + downloadPath + window.encodeURIComponent(filePath)
+   }" target="_blank">
+     <span class="h-10 w-10 rounded-xl bg-Gray-50 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+   <path d="M3 12.1817C2.09551 11.5762 1.5 10.5452 1.5 9.375C1.5 7.61732 2.84363 6.17347 4.55981 6.01453C4.91086 3.8791 6.76518 2.25 9 2.25C11.2348 2.25 13.0891 3.8791 13.4402 6.01453C15.1564 6.17347 16.5 7.61732 16.5 9.375C16.5 10.5452 15.9045 11.5762 15 12.1817M6 12.75L9 15.75M9 15.75L12 12.75M9 15.75V9" stroke="#0C131A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+-</svg></span><span class="flex-1">${fileName}</span></a>`;
++</svg></span><span class="flex-1">${safeName}</span></a>`;
+
+   const conn = getNatsConn();
+   if (conn) {
+-    const selectedChatOption = store.getState().roomSettings.selectedChatOption;
++    const selectedChatOption = target ?? store.getState().roomSettings.selectedChatOption;
+     await conn.sendChatMsg(selectedChatOption, message);
+
+     // send analytics
+@@ -213,6 +220,32 @@ export const publishFileAttachmentToChat = async (filePath: string, fileName: st
+   }
+ };
+
++export async function downloadRoomAttachment(event: MouseEvent) {
++  if (!(event.target instanceof Element)) return;
++  const link = event.target.closest<HTMLAnchorElement>('a.attachment-message');
++  if (!link) return;
++  const url = new URL(link.href);
++  const expected = new URL(serverUrl + '/api/downloadRoomFile/');
++  if (url.origin !== expected.origin || !url.pathname.startsWith(expected.pathname)) return;
++  event.preventDefault();
++  const response = await fetch(url, { headers: { Authorization: store.getState().session.token } });
++  if (!response.ok) throw new Error('Room file download failed');
++  const objectUrl = URL.createObjectURL(await response.blob());
++  const download = document.createElement('a');
++  download.href = objectUrl;
++  download.download = link.lastElementChild?.textContent || 'attachment';
++  download.click();
++  setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
++}
++
++export function canAttachToCurrentChat(): boolean {
++  const { session, roomSettings } = store.getState();
++  return (
++    session.currentRoom.metadata?.extraData?.ineshast_shared_files !== 'true' ||
++    roomSettings.selectedChatOption === 'public'
++  );
++}
++
+ export const formatDate = (timeStamp: string) => {
+   const date = new Date(Number(timeStamp));
+   return date.toLocaleString([], {

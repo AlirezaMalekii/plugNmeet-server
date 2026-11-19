@@ -187,6 +187,21 @@ func (m *FileModel) ResumableFileUpload(c fiber.Ctx, req *ResumableUploadReq) (*
 // UploadedFileMerge will combine all the parts and create a final file
 func (m *FileModel) UploadedFileMerge(req *plugnmeet.UploadedFileMergeReq) (*plugnmeet.UploadedFileRes, plugnmeet.StatusCode, error) {
 	safeFilename := helpers.MakeSafeFilename(req.ResumableFilename, true)
+	originalFilename := safeFilename
+	meetingID := ""
+	if req.FileType == plugnmeet.RoomUploadedFileType_CHAT_FILE {
+		room, err := m.natsService.GetRoomMetadataStruct(req.RoomId)
+		if err != nil || room == nil {
+			return nil, plugnmeet.StatusCode_INVALID_PARAMETERS, config.ErrFileInvalidRequest
+		}
+		if room.GetExtraData()["ineshast_shared_files"] == "true" {
+			meetingID = room.GetExtraData()["ineshast_meeting_id"]
+		}
+		if meetingID != "" {
+			safeFilename = helpers.IneshastChatFilePrefix + uuid.NewString() + filepath.Ext(safeFilename)
+		}
+	}
+
 	req.ResumableIdentifier = helpers.MakeSafeFilename(req.ResumableIdentifier, false) // should be fine here as already uploaded
 	if req.ResumableIdentifier == "" {
 		return nil, plugnmeet.StatusCode_INVALID_PARAMETERS, config.ErrFileInvalidRequest
@@ -275,6 +290,20 @@ func (m *FileModel) UploadedFileMerge(req *plugnmeet.UploadedFileMergeReq) (*plu
 
 	// Common logic for creating metadata and response
 	fileId := uuid.NewString()
+	if meetingID != "" {
+		localPath, err := validateLocalRoomFilePath(req.RoomSid, finalPath)
+		if err != nil {
+			return nil, plugnmeet.StatusCode_INTERNAL_SERVER_ERROR, config.ErrFileMergeFailed
+		}
+		absolute := filepath.Join(m.app.UploadFileSettings.Path, localPath)
+		if err := helpers.ArchiveIneshastFile(m.ctx, m.app.Client.Secret, meetingID, req.RoomSid, fileId, originalFilename, "room_chat", absolute); err != nil {
+			log.WithError(err).Error("failed to archive iNeshast chat attachment")
+			_ = os.Remove(absolute)
+			return nil, plugnmeet.StatusCode_INTERNAL_SERVER_ERROR, config.ErrFileMergeFailed
+		}
+		safeFilename = originalFilename
+	}
+
 	if req.FileType != plugnmeet.RoomUploadedFileType_WHITEBOARD_CONVERTED_FILE {
 		// we can save other files because this type file will process again
 		// we'll save after complete conversion of that file

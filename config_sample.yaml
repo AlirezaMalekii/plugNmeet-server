@@ -215,7 +215,7 @@ upload_file_settings:
   max_size_whiteboard_file: 30
   # If true, uploaded files will not be deleted after the session ends.
   keep_forever: false
-  allowed_types: ["jpg","png","jpeg","svg","pdf","docx","txt","xlsx","pptx","zip","mp4","webm","mp3"]
+  allowed_types: ["jpg","png","jpeg","svg","pdf","docx","txt","csv","webp","xlsx","pptx","zip","mp4","webm","mp3"]
 
 recorder_info:
   # This path must match the recorder's copy_to_dir > main_path setting.

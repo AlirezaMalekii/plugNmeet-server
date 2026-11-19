@@ -165,6 +165,7 @@ func (r *Router) registerAuthRoutes() {
 	room.Post("/endRoom", r.ctrl.RoomController.HandleEndRoom)
 	room.Post("/fetchPastRooms", r.ctrl.RoomController.HandleFetchPastRooms)
 	room.Post("/broadcastToRoom", r.ctrl.RoomController.HandleBroadcastToRoom)
+	room.Post("/configureChatFileLock", r.ctrl.FileController.HandleConfigureChatFileLock)
 	room.Post("/uploadWhiteboardFile", r.ctrl.FileController.HandleUploadWhiteboardFile)
 	room.Post("/createPoll", r.ctrl.PollsController.HandleCreatePollAuth)
 
@@ -279,6 +280,7 @@ func (r *Router) registerAPIRoutes() {
 	// as resumable.js will upload multiple parts of the file in different request
 	// merging request should be sent from another request
 	// otherwise hard to do it concurrently
+	api.Get("/downloadRoomFile/*", r.ctrl.FileController.HandleDownloadUploadedFile)
 	api.Post("/uploadedFileMerge", r.ctrl.FileController.HandleUploadedFileMerge)
 	// uploadBase64EncodedData will accept raw base64 data of files
 	// mostly for whiteboard images

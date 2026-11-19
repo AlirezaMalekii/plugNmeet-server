@@ -49,6 +49,8 @@ services:
     <<: *common
     image: ${SERVER_IMAGE:?set immutable image}
     command: [plugnmeet-server, --config, /app/config.yaml]
+    environment:
+      INESHAST_SHARED_FILES_URL: ${INESHAST_SHARED_FILES_URL:-https://api.ineshast.ir/api/v1/webhooks/plugnmeet/files}
     volumes:
       - ./runtime/server.yaml:/app/config.yaml:ro
       - ./runtime/client-config.js:/app/client/dist/assets/config.js:ro

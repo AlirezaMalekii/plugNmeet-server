@@ -2,9 +2,12 @@ package controllers
 
 import (
 	"context"
+	"crypto/sha256"
 	"errors"
+	"fmt"
 	"net/url"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -63,6 +66,7 @@ func (fc *FileController) HandleFileUpload(c fiber.Ctx) error {
 	req.RoomId = fiber.Locals[string](c, "roomId")
 	req.RoomSid = fiber.Locals[string](c, "roomSid")
 	req.UserId = fiber.Locals[string](c, "requestedUserId")
+	req.ResumableIdentifier = scopedUploadID(req.UserId, req.ResumableIdentifier)
 
 	if req.RoomSid == "" || req.RoomId == "" {
 		return utils.SendCommonErrorJsonResponse(c, config.ErrFileInvalidRequest.Error(), plugnmeet.StatusCode_INVALID_PARAMETERS)
@@ -100,12 +104,92 @@ func (fc *FileController) HandleUploadedFileMerge(c fiber.Ctx) error {
 
 	req.RoomId = fiber.Locals[string](c, "roomId")
 	req.RoomSid = fiber.Locals[string](c, "roomSid")
+	req.ResumableIdentifier = scopedUploadID(fiber.Locals[string](c, "requestedUserId"), req.ResumableIdentifier)
+	if req.FileType == plugnmeet.RoomUploadedFileType_CHAT_FILE && !fc.canShareChatFile(c) {
+		return utils.SendCommonErrorProtobufResponse(c, config.ErrFileInvalidRequest.Error(), plugnmeet.StatusCode_PERMISSION_DENIED)
+	}
+
 	res, statusCode, err := fc.FileModel.UploadedFileMerge(req)
 	if err != nil {
 		return utils.SendCommonErrorProtobufResponse(c, err.Error(), statusCode)
 	}
 
 	return utils.SendProtobufResponse(c, res)
+}
+
+// Chunks are private to the uploader even when another member picks a file
+// with the same browser-generated resumable identifier.
+func scopedUploadID(userID, identifier string) string {
+	if userID == "" || identifier == "" {
+		return ""
+	}
+	return fmt.Sprintf("%x", sha256.Sum256([]byte(userID+"\x00"+identifier)))
+}
+
+// HandleConfigureChatFileLock applies the pre-meeting setting to a prepared room.
+func (fc *FileController) HandleConfigureChatFileLock(c fiber.Ctx) error {
+	var req struct {
+		RoomID  string `json:"room_id"`
+		RoomSID string `json:"room_sid"`
+		Locked  bool   `json:"locked"`
+	}
+	if err := c.Bind().Body(&req); err != nil || req.RoomID == "" || req.RoomSID == "" {
+		return c.SendStatus(fiber.StatusBadRequest)
+	}
+	info, err := fc.NatsService.GetRoomInfo(req.RoomID)
+	if err != nil || info == nil || info.RoomSid != req.RoomSID {
+		return c.SendStatus(fiber.StatusConflict)
+	}
+	users, err := fc.NatsService.GetOnlineUsersId(req.RoomID)
+	if err != nil || len(users) != 0 {
+		return c.SendStatus(fiber.StatusConflict)
+	}
+	room, err := fc.NatsService.GetRoomMetadataStruct(req.RoomID)
+	if err != nil || room.GetExtraData()["ineshast_shared_files"] != "true" {
+		return c.SendStatus(fiber.StatusConflict)
+	}
+	if room.DefaultLockSettings == nil {
+		room.DefaultLockSettings = new(plugnmeet.LockSettings)
+	}
+	room.DefaultLockSettings.LockChatFileShare = &req.Locked
+	if err := fc.NatsService.UpdateAndBroadcastRoomMetadata(req.RoomID, room); err != nil {
+		return c.SendStatus(fiber.StatusServiceUnavailable)
+	}
+	return utils.SendCommonProtoJsonResponse(c, true, config.MsgIntegratorSuccess, plugnmeet.StatusCode_SUCCESS)
+}
+
+func (fc *FileController) canShareChatFile(c fiber.Ctx) bool {
+	roomID := fiber.Locals[string](c, "roomId")
+	userID := fiber.Locals[string](c, "requestedUserId")
+	room, err := fc.NatsService.GetRoomMetadataStruct(roomID)
+	if err != nil {
+		return false
+	}
+	user, metadata, err := fc.NatsService.GetUserWithMetadata(roomID, userID)
+	return err == nil && chatFileSharingAllowed(room, user, metadata)
+}
+
+func chatFileSharingAllowed(room *plugnmeet.RoomMetadata, user *plugnmeet.NatsKvUserInfo, metadata *plugnmeet.UserMetadata) bool {
+	features := room.GetRoomFeatures().GetChatFeatures()
+	if !features.GetIsAllow() || !features.GetIsAllowFileUpload() || user == nil || metadata == nil {
+		return false
+	}
+	if user.GetIsAdmin() {
+		return true
+	}
+	defaults, locks := room.GetDefaultLockSettings(), metadata.GetLockSettings()
+	if locks == nil {
+		locks = new(plugnmeet.LockSettings)
+	}
+	locked := func(override *bool, fallback bool) bool {
+		if override != nil {
+			return *override
+		}
+		return fallback
+	}
+	return !locked(locks.LockChat, defaults.GetLockChat()) &&
+		!locked(locks.LockChatSendMessage, defaults.GetLockChatSendMessage()) &&
+		!locked(locks.LockChatFileShare, defaults.GetLockChatFileShare())
 }
 
 // HandleUploadBase64EncodedData handles uploading base64 encoded data.
@@ -116,6 +200,10 @@ func (fc *FileController) HandleUploadBase64EncodedData(c fiber.Ctx) error {
 	req := new(plugnmeet.UploadBase64EncodedDataReq)
 	if err := proto.Unmarshal(c.Body(), req); err != nil {
 		fc.logger.WithError(err).Warnln("failed to unmarshal base64 upload request")
+		return utils.SendCommonErrorProtobufResponse(c, config.ErrFileInvalidRequest.Error(), plugnmeet.StatusCode_INVALID_PARAMETERS)
+	}
+
+	if req.FileType == plugnmeet.RoomUploadedFileType_CHAT_FILE {
 		return utils.SendCommonErrorProtobufResponse(c, config.ErrFileInvalidRequest.Error(), plugnmeet.StatusCode_INVALID_PARAMETERS)
 	}
 
@@ -168,6 +256,13 @@ func (fc *FileController) HandleDownloadUploadedFile(c fiber.Ctx) error {
 			}
 		}
 		return c.Status(fiber.StatusBadRequest).SendString(config.MsgFileDownloadInvalidPath)
+	}
+
+	if strings.HasPrefix(filepath.Base(relativePath), helpers.IneshastChatFilePrefix) {
+		sid := fiber.Locals[string](c, "roomSid")
+		if sid == "" || strings.Split(relativePath, "/")[0] != sid {
+			return c.SendStatus(fiber.StatusNotFound)
+		}
 	}
 
 	if fc.AppConfig.Hooks != nil {

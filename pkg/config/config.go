@@ -279,7 +279,7 @@ func InitAppConfig(appCnf *AppConfig) (*AppConfig, error) {
 		appCnf.UploadFileSettings.MaxSizeWhiteboardFile = 30
 	}
 	if len(appCnf.UploadFileSettings.AllowedTypes) == 0 {
-		appCnf.UploadFileSettings.AllowedTypes = []string{"jpg", "png", "jpeg", "svg", "pdf", "docx", "txt", "xlsx", "pptx", "zip", "mp4", "webm", "mp3"}
+		appCnf.UploadFileSettings.AllowedTypes = []string{"jpg", "png", "jpeg", "svg", "pdf", "docx", "txt", "csv", "webp", "xlsx", "pptx", "zip", "mp4", "webm", "mp3"}
 	}
 	sort.Strings(appCnf.UploadFileSettings.AllowedTypes)
 

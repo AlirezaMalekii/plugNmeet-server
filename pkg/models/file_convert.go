@@ -259,6 +259,17 @@ func (m *FileModel) processAndBroadcastWhiteboardFile(roomId, roomSid, filePath 
 		}
 	}
 
+	room, roomErr := m.natsService.GetRoomMetadataStruct(roomId)
+	if roomErr != nil {
+		return nil, roomErr
+	}
+	if meetingID := room.GetExtraData()["ineshast_meeting_id"]; meetingID != "" && room.GetExtraData()["ineshast_shared_files"] == "true" {
+		if err := helpers.ArchiveIneshastFile(m.ctx, m.app.Client.Secret, meetingID, roomSid, fileId, fileName, "room_presentation", fullPath); err != nil {
+			log.WithError(err).Error("failed to archive iNeshast presentation")
+			return nil, fmt.Errorf("failed to archive presentation")
+		}
+	}
+
 	res = &ConvertWhiteboardFileRes{
 		Status:     true,
 		Msg:        config.MsgSuccess,
